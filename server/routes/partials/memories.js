@@ -2,7 +2,7 @@
     "use strict";
 
 
-    module.exports = function (app, cloudantFactory, request, obj_helper, photoHelper) {
+    module.exports = function (app, cloudantFactory, request, obj_helper, photoHelper, upload) {
 
         const options = {
             "method": 'POST',
@@ -16,7 +16,7 @@
         };
 
 
-        app.get('/storeMemory', function (req, res) {
+        app.post('/storeMemory', upload.single('photo'), function (req, res) {
 
             // request(options, function (error, response, body) {
             //     if (error) {
@@ -27,14 +27,11 @@
             // });
 
 
-            photoHelper.getMatadata(buffer).then(function (metadata) {
-                console.log(metadata);
+            photoHelper.getMatadata(req.file.buffer).then(function (metadata) {
+                res.status(200).send(metadata);
             }).catch(function (err) {
-                console.log(error);
+                res.status(400).send(err);
             });
-
-
-
 
         });
     };
