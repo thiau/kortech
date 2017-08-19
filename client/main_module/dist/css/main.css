@@ -1,0 +1,203 @@
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.widget-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  border-radius: 10px;
+  position: fixed;
+  display: flex;
+  height: 100px;
+  width: 400px;
+  bottom: 0;
+  /*right: calc(-300px - var(--widget-margin));*/
+  right: 0;
+  margin: 15px;
+  background-color: #e794e7;
+  /*animation: show-widget 0.2s ease-out forwards;*/
+  margin: 15px;
+  background-color: #e794e7;
+}
+
+
+.init {
+  -webkit-animation: show-widget 0.2s ease-out forwards;
+          animation: show-widget 0.2s ease-out forwards;
+  cursor: pointer;
+}
+
+.opened {
+  -webkit-animation: show-full-widget 0.5s ease-out forwards;
+          animation: show-full-widget 0.5s ease-out forwards;
+  cursor: default;
+}
+
+.closed {
+  -webkit-animation: hide-full-widget 0.5s ease-in forwards;
+          animation: hide-full-widget 0.5s ease-in forwards;
+  cursor: pointer;
+}
+
+.widget-icon-wrapper {
+  height: 100%;
+  width: 100%;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.widget-icon {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  height: 50%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url('/assets/mic.svg');
+}
+
+
+.widget-icon:active {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  height: 50%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url('/assets/mic.svg');
+  -webkit-transform: scale(0.95);
+          transform: scale(0.95);
+}
+
+.widget-text-wrapper {
+  height: 100%;
+  width: 100%;
+  -webkit-box-flex: 3;
+      -ms-flex: 3;
+          flex: 3;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.widget-text {
+  padding: 10px;
+  max-width: 100%;
+  word-break: break-word;
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-family: HelvRegularIBM, "Helvetica Neue", Arial, sans-serif;
+  -webkit-animation: text-change 0.3s ease-out forwards;
+          animation: text-change 0.3s ease-out forwards;
+}
+
+@-webkit-keyframes text-change {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes text-change {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+@-webkit-keyframes show-widget {
+  from {
+    right: -400px;
+    opacity: 0;
+  }
+  to {
+    right: -315px;
+    opacity: 1;
+  }
+}
+
+
+@keyframes show-widget {
+  from {
+    right: -400px;
+    opacity: 0;
+  }
+  to {
+    right: -315px;
+    opacity: 1;
+  }
+}
+
+
+@-webkit-keyframes show-full-widget {
+  from {
+    right: -315px;
+  }
+  to {
+    right: 0;
+  }
+}
+
+
+@keyframes show-full-widget {
+  from {
+    right: -315px;
+  }
+  to {
+    right: 0;
+  }
+}
+
+@-webkit-keyframes hide-full-widget {
+  from {
+    right: 0;
+  }
+  to {
+    right: -315px;
+  }
+}
+
+@keyframes hide-full-widget {
+  from {
+    right: 0;
+  }
+  to {
+    right: -315px;
+  }
+}
