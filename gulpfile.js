@@ -174,7 +174,7 @@
 	});
 
 	gulp.task("build", function () {
-		runSequence("lint", "js", "css", "generate-sw");
+		runSequence("lint", "js", "css");
 	});
 
 	gulp.task("js", function () {

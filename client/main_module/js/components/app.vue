@@ -2,7 +2,7 @@
 	<div id="app">
 		<header-app></header-app>
 		<div id="content">
-			oi
+			oix
 		</div>
 	</div>
 </template>
@@ -10,6 +10,8 @@
 <script type="text/javascript">
 	(function () {
 		"use strict";
+		const annyang = require("annyang");
+		const factory = require("../factory/factory");
 		module.exports = {
 			"name": "app",
 			"data": function () {
@@ -20,14 +22,13 @@
 			},
 			"methods": {
 				"start": function (debug) {
-					return new Promise(function (resolve, reject) {
-						const annyang = require("annyang");
+					return new Promise(function (resolve) {
 						if (!debug) {
 							annyang.debug();
 						}
 
 						annyang.start();
-						annyang.addCallback("result", function(userSaid, commandText, phrases) {
+						annyang.addCallback("result", function(userSaid) {
 							if (Array.isArray(userSaid)) {
 								userSaid = userSaid[0];
 							}
