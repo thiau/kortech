@@ -4,8 +4,8 @@
 /*jslint node:true*/
 (function () {
     "use strict";
-    var Cloudant = require("cloudant"),
-        credentials = {
+    const Cloudant = require("cloudant");
+	const credentials = {
             "username": process.env.CLOUDANT_USER || JSON.parse(process.env.VCAP_SERVICES)["cloudantNoSQLDB"][0].credentials.username,
             "password": process.env.CLOUDANT_PASS || JSON.parse(process.env.VCAP_SERVICES)["cloudantNoSQLDB"][0].credentials.password,
         };
