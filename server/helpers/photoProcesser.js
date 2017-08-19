@@ -3,10 +3,6 @@
 
     module.exports = function (ExifImage, cloudantFactory) {
 
-        var database = cloudantFactory("img_metadata");
-
-        //'/Users/thirauj/Documents/Thiago/IBM/CIO/Applications/kortech/server/helpers/IMG_1164.jpg'
-
         return {
             "getMatadata": function (photo_path) {
                 return new Promise(function(resolve, reject) {
@@ -39,7 +35,7 @@
                     } catch (error) {
                         reject({
                             "error": error
-                        })
+                        });
                     }
                 });
             }

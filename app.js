@@ -73,7 +73,7 @@
 	);
 
 	require("./server/helpers/passport")(passport);
-	require("./server/routes/index")(app, upload, ttshelpers, stthelpers, wcshelpers, FileHandler, fs);
+	require("./server/routes/index")(app, upload, ttshelpers, stthelpers, wcshelpers, FileHandler, fs, obj_helper, cloudantFactory, request, photoHelper);
 
 	server.listen(appPort, function () {
 		process.stdout.write(`\nServer running on port: ${appPort}\n`);
