@@ -15,8 +15,7 @@
 
     module.exports = function (app, upload, ttshelpers, stthelpers, wcshelpers, FileHandler, fs, obj_helper, cloudantFactory, request, photoHelper) {
     	require("./partials/watsonHandler")(app, upload, FileHandler, fs);
-        require("./partials/memories")(app, cloudantFactory, request, obj_helper, photoHelper);
-
+      require("./partials/memories")(app, cloudantFactory, request, obj_helper, photoHelper, upload);
         app.get("/", function (req, res) {
             return res.status(200).render("./main_module/index.html");
         });
