@@ -20,6 +20,11 @@
         app.get("/", function (req, res) {
             return res.status(200).render("./main_module/index.html");
         });
+
+        app.post("/test_os", function(req, res){
+          obj_helper.teste();
+          res.send("foi");
+        });
     };
 
 

@@ -27,6 +27,8 @@
 	const ExifImage = require('exif').ExifImage;
 	const photoHelper = require("./server/helpers/photoProcesser")(ExifImage, cloudantFactory);
 	const multer = require("multer");
+	const obj_helper = require("./server/helpers/objectStorageHandler");
+
 	const upload = multer({
 		"fileFilter": function (req, file, cb) {
 			try {
