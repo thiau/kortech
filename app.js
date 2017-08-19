@@ -27,6 +27,8 @@
 	const ExifImage = require('exif').ExifImage;
 	const photoHelper = require("./server/helpers/photoProcesser")(ExifImage, cloudantFactory);
 	const multer = require("multer");
+	const obj_helper = require("./server/helpers/objectStorageHandler");
+
 	const upload = multer({
 		"fileFilter": function (req, file, cb) {
 			try {
@@ -73,7 +75,7 @@
 	);
 
 	require("./server/helpers/passport")(passport);
-	require("./server/routes/index")(app, upload, ttshelpers, stthelpers, wcshelpers, FileHandler, fs);
+	require("./server/routes/index")(app, upload, ttshelpers, stthelpers, wcshelpers, FileHandler, fs, obj_helper);
 
 	server.listen(appPort, function () {
 		process.stdout.write(`\nServer running on port: ${appPort}\n`);
