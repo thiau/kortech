@@ -24,7 +24,7 @@
       },
       "upload": function (name, data) {
         return new Promise(function (resolve, reject) {
-          objectStorage.getContaier("images").then(function (container) {
+          objectStorage.getContainer("images").then(function (container) {
             container.createObject(name, data).then(function (response) {
               resolve({
                 "message": "uploaded successfully"

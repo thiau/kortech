@@ -28,7 +28,11 @@
 
 
             photoHelper.getMatadata(req.file.buffer).then(function (metadata) {
-                res.status(200).send(metadata);
+                obj_helper.upload(metadata.id, req.file.buffer).then(function (response) {
+                    res.status(200).send(response);
+                }).catch(function (err) {
+                    res.status(400).send(err);
+                });
             }).catch(function (err) {
                 res.status(400).send(err);
             });
