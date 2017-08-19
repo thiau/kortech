@@ -9,7 +9,9 @@
 	const appPort = process.env.APP_PORT || process.env.VCAP_APP_PORT || 6012;
 	const express = require("express");
 	const request = require("request");
+	const cloudantFactory = require("./server/helpers/cloudant");
 	const app = express();
+	const fs = require("fs");
 	const server = require("http").createServer(app);
 	const cookieSession = require("cookie-session");
 	const cookieParser = require("cookie-parser");
@@ -22,8 +24,9 @@
 	const stthelpers = require("./server/helpers/audioConverter")();
 	const ttshelpers = require("./server/helpers/textConverter")();
 	const wcshelpers = require("./server/helpers/conversation")();
+	const ExifImage = require('exif').ExifImage;
+	const photoHelper = require("./server/helpers/photoProcesser")(ExifImage, cloudantFactory);
 	const multer = require("multer");
-	const fs = require("fs");
 	const upload = multer({
 		"fileFilter": function (req, file, cb) {
 			try {
