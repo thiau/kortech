@@ -14,7 +14,7 @@
     };
 
     module.exports = function (app, upload, ttshelpers, stthelpers, wcshelpers, FileHandler, fs, obj_helper, cloudantFactory, request, photoHelper) {
-    	require("./partials/watsonHandler")(app, upload, text_to_speech, speech_to_text, conversation, FileHandler, fs);
+    	require("./partials/watsonHandler")(app, upload, FileHandler, fs);
         require("./partials/memories")(app, cloudantFactory, request, obj_helper, photoHelper);
 
         app.get("/", function (req, res) {
@@ -22,8 +22,9 @@
         });
 
         app.post("/test_os", function(req, res){
-          obj_helper.teste();
+          obj_helper().teste("foto.jpg");
           res.send("foi");
+
         });
     };
 
