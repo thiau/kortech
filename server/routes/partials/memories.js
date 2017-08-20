@@ -9,7 +9,7 @@
             photoHelper.getMatadata(req.file.buffer).then(function (metadata) {
                 request({
                     "method": 'POST',
-                    "url": 'http://9.86.236.55:8080/getObjects',
+                    "url": 'http://9.45.201.45:8080/getObjects',
                     "headers": {
                         'content-type': 'multipart/form-data'
                     },

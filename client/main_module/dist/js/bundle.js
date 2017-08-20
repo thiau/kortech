@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app[data-v-69a301b2] {\n\twidth: 100%;\n\theight:100%;\n\tmargin: 0;\n\tpadding: 0;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tflex-direction: column;\n}\n\n#app > *[data-v-69a301b2] {\n\tbox-sizing: inherit;\n}")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app[data-v-69a301b2] {\n\twidth: 100%;\n\theight:100%;\n\tmargin: 0;\n\tpadding: 0;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tflex-direction: column;\n}\n\n#content[data-v-69a301b2] {\n\toverflow-y: scroll;\n\tmax-height: 100%;\n\twidth: 100%;\n\theight: 100%;\n\tbackground-color: azure;\n}\n\n#app > *[data-v-69a301b2] {\n\tbox-sizing: inherit;\n}\n\n.suggestion[data-v-69a301b2] {\n\tbackground-color: white;\n\t/* width: 50%; */\n\tborder: 1px solid gainsboro;\n\tpadding: 20px;\n\tmargin: 10px;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tmax-width: 100%;\n\tflex-direction: column;\n\t/* width: 100%; */\n\theight: 250px;\n\tjustify-content: center;\n\talign-items: center;\n}")
 ;(function(){
 "use strict";
 
@@ -61,9 +61,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 						factory.askWatson(userSaid).then(function (watsonResponse) {
 							watsonResponse.docs.forEach(function (doc) {
 								factory.getImage(doc._id).then(function (image) {
-									var binary = btoa(String.fromCharCode.call(null, image));
-									console.log(binary);
-									doc.picture = 'data:image/png;base64,' + binary;
+									doc.picture = 'data:image/png;base64,' + image;
 									_this.results.push(doc);
 								});
 							});
@@ -81,7 +79,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 					this.changeListeningStatus();
 					console.log(this.annyang);
 					this.annyang.removeCallback("result", function () {
-						_this2.annyang.pause();
+						_this2.annyang.abort();
 					});
 				}
 			}
@@ -92,7 +90,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('header-app'),_vm._v(" "),_c('div',{attrs:{"id":"content"}},[_c('div',{on:{"click":_vm.toggleListen}},[_vm._v("\n\t\t\t"+_vm._s(_vm.isListening ? "Listening" : "Click to listen")+"\n\t\t")]),_vm._v(" "),_vm._l((this.results),function(result){return _c('div',[_vm._v("\n\t\t\t"+_vm._s(result)+"\n\t\t\t"),_c('img',{attrs:{"src":result.image}})])})],2)],1)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('header-app'),_vm._v(" "),_c('div',{attrs:{"id":"content"}},[_c('div',{on:{"click":_vm.toggleListen}},[_vm._v("\n\t\t\t"+_vm._s(_vm.isListening ? "Listening" : "Click to listen")+"\n\t\t")]),_vm._v(" "),_vm._l((this.results),function(result){return _c('div',{staticClass:"suggestion"},[_c('div',{staticClass:"image-id"},[_c('h6',[_vm._v("\n\t\t\t\t\tID\n\t\t\t\t")]),_vm._v(" "),_c('span',[_vm._v("\n\t\t\t\t\t"+_vm._s(result._id)+"\n\t\t\t\t")])]),_vm._v(" "),_c('div',{staticClass:"timestamp"},[_c('h6',[_vm._v("\n\t\t\t\t\tTimestamp\n\t\t\t\t")]),_vm._v(" "),_c('span',[_vm._v("\n\t\t\t\t\t"+_vm._s(result.timestamp)+"\n\t\t\t\t")])]),_vm._v(" "),_c('img',{attrs:{"src":result.image}})])})],2)],1)}
 __vue__options__.staticRenderFns = []
 __vue__options__._scopeId = "data-v-69a301b2"
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")

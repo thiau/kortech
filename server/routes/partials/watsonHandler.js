@@ -12,7 +12,6 @@
 				return res.status(500).send("Can not proceed without ID");
 			}
 			obj_helper.get(req.query.id).then(function (imageData) {
-				console.log(imageData);
 				return res.status(200).send(imageData);
 			}, function (err) {
 				return res.status(500).send(err);
@@ -37,12 +36,12 @@
 				let startHour = data.context.time_init;
 				let endHour = data.context.time_end;
 
-				startDate = new Date([startDate, startHour].join(" "));
-				endDate = new Date([endDate, startHour].join(" "));
+				startDateFinal = new Date([startDate, startHour].join(" "));
+				endDateFinal = new Date([endDate, startHour].join(" "));
 
-				let converted = transformDate(startDate, endDate, true);
+				let converted = transformDate(startDateFinal, endDateFinal, true);
 
-				if (startHour === endHour) {
+				if ((startDate === endDate) && (startHour === endHour)) {
 					converted.end += 900000;
 				}
 				console.log(converted);
