@@ -8,7 +8,7 @@
     require("dotenv").config({
         "silent": true
     });
-    const appPort = process.env.APP_PORT || process.env.VCAP_APP_PORT || 6012;
+    const appPort = process.env.PORT || process.env.APP_PORT || process.env.VCAP_APP_PORT || 6012;
     const express = require("express");
     const request = require("request");
     const cloudantFactory = require("./server/helpers/cloudant");
@@ -77,7 +77,7 @@
 
 	require("./server/helpers/passport")(passport);
 	require("./server/routes/index")(app, upload, wcshelpers, FileHandler, fs, obj_helper, cloudantFactory, request, photoHelper);
-	
+
     server.listen(appPort, function () {
         process.stdout.write(`\nServer running on port: ${appPort}\n`);
     });
