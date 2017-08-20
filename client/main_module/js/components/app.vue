@@ -5,7 +5,10 @@
 			<div @click="toggleListen">
 				{{isListening ? "Listening" : "Click to listen"}}
 			</div>
-
+			<div v-for="result in this.results">
+				{{result}}
+				<img :src="result.image" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -19,7 +22,8 @@
 			"data": function () {
 				return {
 					"isListening": false,
-					"annyang": require("annyang")
+					"annyang": require("annyang"),
+					"results": []
 				}
 			},
 			"components": {
@@ -42,30 +46,42 @@
 						if (!debug) {
 							this.annyang.debug();
 						}
-						this.annyang.setLanguage("pt-BR");
-						this.annyang.start();
+
+						if (!this.annyang.isListening()) {
+							this.annyang.setLanguage("pt-BR");
+							this.annyang.start();
+						}
+
 						this.annyang.addCallback("error", function(error) {
 							reject(error);
 						});
 						this.annyang.addCallback("result", (userSaid) => {
+							this.results = [];
 							if (Array.isArray(userSaid)) {
 								userSaid = userSaid[0];
 							}
 							factory.askWatson(userSaid).then((watsonResponse) => {
-								resolve(watsonResponse);
+								watsonResponse.docs.forEach((doc) => {
+									factory.getImage(doc._id).then((image) => {
+										let binary = btoa(String.fromCharCode.call(null, image));
+										console.log(binary);
+										doc.picture = 'data:image/png;base64,' + binary;
+										this.results.push(doc);
+									});
+								})
 							}).catch((err) => {
 								reject(err);
-							}).then(() => {
-								this.stopListening();
 							});
+							this.stopListening();
 						});
 					});
 				},
 				"stopListening": function () {
 					if (this.annyang.isListening()) {
 						this.changeListeningStatus();
+						console.log(this.annyang);
 						this.annyang.removeCallback("result", () => {
-							this.annyang.stop();
+							this.annyang.pause();
 						});
 					}
 				}

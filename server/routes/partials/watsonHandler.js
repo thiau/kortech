@@ -11,7 +11,8 @@
 			if (!req.query.id) {
 				return res.status(500).send("Can not proceed without ID");
 			}
-			obj_helper().get(req.query.id).then(function (imageData) {
+			obj_helper.get(req.query.id).then(function (imageData) {
+				console.log(imageData);
 				return res.status(200).send(imageData);
 			}, function (err) {
 				return res.status(500).send(err);
@@ -33,8 +34,8 @@
 
 				let startDate = data.context.date_init;
 				let endDate = data.context.date_end || data.context.date_init;
-				let startHour = data.context.hour_init;
-				let endHour = data.context.hour_end;
+				let startHour = data.context.time_init;
+				let endHour = data.context.time_end;
 
 				startDate = new Date([startDate, startHour].join(" "));
 				endDate = new Date([endDate, startHour].join(" "));
@@ -48,13 +49,15 @@
 
 				imageDB.get({
 					"selector": {
+						"person": data.context.person,
+						"laptop": data.context.laptop,
 						"$and": [{
 							"timestamp": {
-								"$gt": converted.start
+								"$gte": converted.start
 							}
 						}, {
 							"timestamp": {
-								"$lt": converted.end
+								"$lte": converted.end
 							}
 						}]
 					},

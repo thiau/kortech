@@ -9,18 +9,21 @@
   module.exports = function () {
     return {
       "get": function (imageName) {
-        objectStorage.getContainer("images")
-          .then(function (container) {
-            container.getObject(imageName).then(function (obj) {
-              obj.load(false)
-                .then(function (content) {
-                  resolve(content);
-                })
-            });
-          })
-          .catch(function (err) {
-            reject(err);
-          })
+      	return new Promise(function (resolve, reject) {
+			objectStorage.getContainer("images")
+				.then(function (container) {
+					container.getObject(imageName).then(function (obj) {
+						obj.load(false)
+							.then(function (content) {
+								resolve(content);
+							})
+					});
+				})
+				.catch(function (err) {
+					reject(err);
+				});
+		});
+
       },
       "upload": function (name, data) {
         return new Promise(function (resolve, reject) {

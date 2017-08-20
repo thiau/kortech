@@ -42,6 +42,39 @@
 					reject("AJAX Calls not supported on this browser");
 				}
 			});
+		},
+		"getImage": function (imageId) {
+			return new Promise(function (resolve, reject) {
+
+				if (window.XMLHttpRequest) {
+					let xhttp = new window.XMLHttpRequest();
+					xhttp.onreadystatechange = function() {
+						if (xhttp.readyState === 4) {
+							if (xhttp.status === 200 || xhttp.status === 201) {
+								if (xhttp.responseText) {
+									try {
+										resolve(JSON.parse(xhttp.responseText));
+									} catch (e) {
+										resolve(xhttp.responseText);
+									}
+								} else {
+									reject("An error occurred: Empty response");
+								}
+
+							} else {
+								reject(["An error occurred:", xhttp.responseText].join());
+							}
+						}
+					};
+
+					xhttp.open("GET", "/getImageById?id=" + imageId);
+					xhttp.send();
+
+				} else {
+					reject("AJAX Calls not supported on this browser");
+				}
+			});
+
 		}
     };
 

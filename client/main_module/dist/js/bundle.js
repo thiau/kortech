@@ -18,7 +18,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 		"data": function data() {
 			return {
 				"isListening": false,
-				"annyang": require("annyang")
+				"annyang": require("annyang"),
+				"results": []
 			};
 		},
 		"components": {
@@ -43,22 +44,33 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 					if (!debug) {
 						_this.annyang.debug();
 					}
-					_this.annyang.setLanguage("pt-BR");
-					_this.annyang.start();
+
+					if (!_this.annyang.isListening()) {
+						_this.annyang.setLanguage("pt-BR");
+						_this.annyang.start();
+					}
+
 					_this.annyang.addCallback("error", function (error) {
 						reject(error);
 					});
 					_this.annyang.addCallback("result", function (userSaid) {
+						_this.results = [];
 						if (Array.isArray(userSaid)) {
 							userSaid = userSaid[0];
 						}
 						factory.askWatson(userSaid).then(function (watsonResponse) {
-							resolve(watsonResponse);
+							watsonResponse.docs.forEach(function (doc) {
+								factory.getImage(doc._id).then(function (image) {
+									var binary = btoa(String.fromCharCode.call(null, image));
+									console.log(binary);
+									doc.picture = 'data:image/png;base64,' + binary;
+									_this.results.push(doc);
+								});
+							});
 						}).catch(function (err) {
 							reject(err);
-						}).then(function () {
-							_this.stopListening();
 						});
+						_this.stopListening();
 					});
 				});
 			},
@@ -67,8 +79,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 				if (this.annyang.isListening()) {
 					this.changeListeningStatus();
+					console.log(this.annyang);
 					this.annyang.removeCallback("result", function () {
-						_this2.annyang.stop();
+						_this2.annyang.pause();
 					});
 				}
 			}
@@ -79,7 +92,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('header-app'),_vm._v(" "),_c('div',{attrs:{"id":"content"}},[_c('div',{on:{"click":_vm.toggleListen}},[_vm._v("\n\t\t\t"+_vm._s(_vm.isListening ? "Listening" : "Click to listen")+"\n\t\t")])])],1)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('header-app'),_vm._v(" "),_c('div',{attrs:{"id":"content"}},[_c('div',{on:{"click":_vm.toggleListen}},[_vm._v("\n\t\t\t"+_vm._s(_vm.isListening ? "Listening" : "Click to listen")+"\n\t\t")]),_vm._v(" "),_vm._l((this.results),function(result){return _c('div',[_vm._v("\n\t\t\t"+_vm._s(result)+"\n\t\t\t"),_c('img',{attrs:{"src":result.image}})])})],2)],1)}
 __vue__options__.staticRenderFns = []
 __vue__options__._scopeId = "data-v-69a301b2"
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
@@ -181,6 +194,36 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 					xhttp.send((0, _stringify2.default)({
 						"question": question
 					}));
+				} else {
+					reject("AJAX Calls not supported on this browser");
+				}
+			});
+		},
+		"getImage": function getImage(imageId) {
+			return new _promise2.default(function (resolve, reject) {
+
+				if (window.XMLHttpRequest) {
+					var xhttp = new window.XMLHttpRequest();
+					xhttp.onreadystatechange = function () {
+						if (xhttp.readyState === 4) {
+							if (xhttp.status === 200 || xhttp.status === 201) {
+								if (xhttp.responseText) {
+									try {
+										resolve(JSON.parse(xhttp.responseText));
+									} catch (e) {
+										resolve(xhttp.responseText);
+									}
+								} else {
+									reject("An error occurred: Empty response");
+								}
+							} else {
+								reject(["An error occurred:", xhttp.responseText].join());
+							}
+						}
+					};
+
+					xhttp.open("GET", "/getImageById?id=" + imageId);
+					xhttp.send();
 				} else {
 					reject("AJAX Calls not supported on this browser");
 				}

@@ -23,7 +23,6 @@
         app.post("/test_os", function (req, res) {
             obj_helper().teste("foto.jpg");
             res.send("foi");
-
         });
     };
 
