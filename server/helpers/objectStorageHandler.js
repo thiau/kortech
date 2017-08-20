@@ -16,7 +16,7 @@
 						obj.load(false)
 							.then(function (content) {
 							  console.log("Buffer", Buffer.from(content));
-							  console.log("Content", content)
+							  console.log("Content", content);
 								resolve(Buffer.from(content));
 							})
 					});
