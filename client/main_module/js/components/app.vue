@@ -3,7 +3,8 @@
 		<header-app></header-app>
 		<div id="content">
 			<div @click="toggleListen" id="listen" v-bind:class="{ 'animated pulse': isListening }">
-				<img src="/assets/sound.svg" class="recording-icon"/>
+				<img v-if="!isListening" src="/assets/sound.svg" class="recording-icon"/>
+				<div v-if="isListening" class="recording-icon-active"/>
 				<span>{{isListening ? "Listening" : "Click to listen"}}</span>
 			</div>
 			<transition-group
@@ -24,8 +25,11 @@
 					</div>
 				</div>
 			</transition-group>
-			<div v-if="results.length <= 0">
-
+			<div v-if="results.length <= 0 && this.initial === 0" id="no-results">
+				<span>No results found</span>
+			</div>
+			<div v-if="results.length <= 0 && this.initial === 1" id="no-results">
+				<span>Start querying now</span>
 			</div>
 			<template v-if="this.isLoading">
 				<transition name="loading">
@@ -57,7 +61,8 @@
 					"isListening": false,
 					"annyang": require("annyang"),
 					"results": [],
-					"isLoading": false
+					"isLoading": false,
+					"initial": 1
 				}
 			},
 			"components": {
@@ -81,6 +86,7 @@
 				"startListening": function (debug) {
 					return new Promise((resolve, reject) => {
 						this.isListening = true;
+						this.initial = false;
 						if (!debug) {
 							this.annyang.debug();
 						}
@@ -220,5 +226,22 @@
 		width: 35px;
 		height: 35px;
 	}
+
+	.recording-icon-active {
+		width: 18px;
+		height: 18px;
+		background-color: orangered;
+		border-radius: 50%;
+		margin: 5px;
+	}
+
+
+	#no-results {
+		height: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
 
 </style>
