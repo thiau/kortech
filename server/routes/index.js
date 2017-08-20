@@ -13,8 +13,8 @@
 		}
     };
 
-    module.exports = function (app, upload, text_to_speech, speech_to_text, conversation, FileHandler, fs) {
-    	require("./partials/watsonHandler")(app, upload, text_to_speech, speech_to_text, conversation, FileHandler, fs);
+    module.exports = function (app, upload, text_to_speech, speech_to_text, conversation, FileHandler, fs, cloudantFactory) {
+    	require("./partials/watsonHandler")(app, upload, text_to_speech, speech_to_text, conversation, FileHandler, fs, cloudantFactory);
         app.get("/", function (req, res) {
             return res.status(200).render("./main_module/index.html");
         });

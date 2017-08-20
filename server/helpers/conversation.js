@@ -14,10 +14,11 @@
                         return reject("Can not proceed without options object");
                     }
 
+
                     if (!options.workspace_id) {
                         options.workspace_id = watsonConfigs.workspace_id;
                     }
-
+					console.log(options);
                     conversationInstance.message(options, function (err, response) {
                         if (err) {
                             console.log(err);

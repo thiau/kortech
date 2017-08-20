@@ -2,7 +2,10 @@
 	<div id="app">
 		<header-app></header-app>
 		<div id="content">
-			oix
+			<div @click="toggleListen">
+				{{isListening ? "Listening" : "Click to listen"}}
+			</div>
+
 		</div>
 	</div>
 </template>
@@ -10,49 +13,63 @@
 <script type="text/javascript">
 	(function () {
 		"use strict";
-		const annyang = require("annyang");
 		const factory = require("../factory/factory");
 		module.exports = {
 			"name": "app",
 			"data": function () {
-				return {}
+				return {
+					"isListening": false,
+					"annyang": require("annyang")
+				}
 			},
 			"components": {
 				"headerApp": require("./header.vue")
 			},
 			"methods": {
-				"start": function (debug) {
-					return new Promise(function (resolve) {
+				"changeListeningStatus": function () {
+					this.isListening = !this.isListening;
+				},
+				"toggleListen": function () {
+					if (this.isListening) {
+						this.stopListening();
+					} else {
+						this.startListening();
+					}
+				},
+				"startListening": function (debug) {
+					return new Promise((resolve, reject) => {
+						this.changeListeningStatus();
 						if (!debug) {
-							annyang.debug();
+							this.annyang.debug();
 						}
-
-						annyang.start();
-						annyang.addCallback("result", function(userSaid) {
+						this.annyang.setLanguage("pt-BR");
+						this.annyang.start();
+						this.annyang.addCallback("error", function(error) {
+							reject(error);
+						});
+						this.annyang.addCallback("result", (userSaid) => {
 							if (Array.isArray(userSaid)) {
 								userSaid = userSaid[0];
 							}
-//							props.messageBox.show(userSaid);
-							factory.askWatson(userSaid).then(function (watsonResponse) {
-								console.log(watsonResponse);
+							factory.askWatson(userSaid).then((watsonResponse) => {
 								resolve(watsonResponse);
-							}).then(function () {
-								annyang.removeCallback("result");
-								annyang.abort();
-//								window.setTimeout(props.messageBox.hide, 2000);
+							}).catch((err) => {
+								reject(err);
+							}).then(() => {
+								this.stopListening();
 							});
-							console.log(userSaid); // sample output: 'hello'
 						});
 					});
 				},
-				"stop": function () {
-					if (annyang.isListening()) {
-						annyang.removeCallback("result");
-						annyang.abort();
+				"stopListening": function () {
+					if (this.annyang.isListening()) {
+						this.changeListeningStatus();
+						this.annyang.removeCallback("result", () => {
+							this.annyang.stop();
+						});
 					}
 				}
 			}
-
 		};
 	}());
 </script>

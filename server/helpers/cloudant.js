@@ -4,10 +4,10 @@
 (function () {
     "use strict";
 
-    var Cloudant = require("../configs/cloudant").init;
+    const Cloudant = require("../configs/cloudant").init;
 
     module.exports = function (collectionName) {
-        var db = Cloudant.db.use(collectionName);
+        let db = Cloudant.db.use(collectionName);
         return {
             "create": function (payload) {
                 return new Promise(function (resolve, reject) {
