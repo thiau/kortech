@@ -18,4 +18,4 @@ __Kortech__ uses the power of __Machine Learning__ to help you to remember the t
 2. `npm install` to install de dependencies;
 3. `gulp build` to run some gulp tasks;
 4. `node app.js` to start the app;
-5. Access http://localhost:6012/ on your browser.
+5. Access http://localhost:6012/ in your browser.
