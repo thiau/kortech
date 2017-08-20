@@ -55,9 +55,9 @@
 						this.startListening();
 					}
 				},
-				"getImage": function (id) {
+				"getImage": function (doc) {
 					factory.getImage(doc._id).then((image) => {
-						doc.picture = 'data:image/jpg;base64,' + image;
+						doc.picture = "data:image/jpg;base64," + image;
 						this.results.push(doc);
 					});
 				},
@@ -84,7 +84,7 @@
 							factory.askWatson(userSaid).then((watsonResponse) => {
 								watsonResponse.docs.forEach((doc) => {
 									factory.getImage(doc._id).then((image) => {
-										doc.picture = 'data:image/jpg;base64,' + image;
+										doc.picture = "data:image/jpg;base64," + image;
 										this.results.push(doc);
 									});
 								})

@@ -1,6 +1,7 @@
 <template>
 	<div id="app-header">
-		header
+		<img src="../main_module/assets/art.png" />
+		<span>Kortech</span>
 	</div>
 </template>
 
@@ -19,12 +20,14 @@
 		};
 	}());
 </script>
+
 <style scoped>
 	#app-header {
-		min-height: 60px;
+		background-color: rgba(0, 0, 0, 0.9);
+		min-height: 70px;
 		width: 100%;
-		border-bottom: 1px solid gainsboro;
-		box-shadow: 0 1px 5px 2px lightblue;
+		border-bottom: 1px solid rgb(210, 210, 210);
+		box-shadow: 0 1px 3px 4px rgba(255,255,255, 1);
 		z-index: 2;
 		display: flex;
 		align-items: center;
@@ -32,6 +35,11 @@
 
 	#app-header img {
 		height: 35px;
-		width: auto;
+		width: 35px;
 	}
+
+	span {
+
+	}
+
 </style>
