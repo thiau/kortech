@@ -2,13 +2,20 @@
 	"use strict";
 
 
-	module.exports = function (app, upload, FileHandler, fs, cloudantFactory, watsonConversation) {
+	module.exports = function (app, upload, FileHandler, fs, cloudantFactory, watsonConversation, obj_helper) {
 		let imageDB = cloudantFactory("img_metadata");
 		let transformDate = require("../../helpers/dateRange").transformDate;
 
 
 		app.get("/getImageById", function (req, res) {
-
+			if (!req.query.id) {
+				return res.status(500).send("Can not proceed without ID");
+			}
+			obj_helper().get(req.query.id).then(function (imageData) {
+				return res.status(200).send(imageData);
+			}, function (err) {
+				return res.status(500).send(err);
+			});
 		});
 
 		app.post("/query", function (req, res) {
@@ -21,6 +28,9 @@
 				},
 				"context": {}
 			}).then(function (data) {
+
+				console.log(data.context);
+
 				let startDate = data.context.date_init;
 				let endDate = data.context.date_end || data.context.date_init;
 				let startHour = data.context.hour_init;

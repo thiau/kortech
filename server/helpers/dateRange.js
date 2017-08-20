@@ -13,10 +13,14 @@
 
             return factor;
         },
-        "transformDate": function (start, end, isPartial) {
+        "transformDate": function (start, end, isPartial, skipTreatment) {
             if (!start || !end) {
                 return false;
             }
+
+            console.log("AQUII");
+            console.log(start);
+            console.log(end);
 
             if (typeof start === "string" && start.indexOf("-") > -1) {
                 start = start.replace("-", "/");
@@ -28,6 +32,9 @@
             try {
                 let startDate = new Date(Number(start) || start);
                 let endDate = new Date(Number(end) || end);
+
+                console.log(startDate);
+                console.log(endDate);
 
                 if (isPartial) {
                     start = startDate.getTime();

@@ -23,8 +23,6 @@
     const morgan = require("morgan");
     const bodyParser = require("body-parser");
     const FileHandler = require("./server/helpers/fileHandler")();
-    const stthelpers = require("./server/helpers/audioConverter")();
-    const ttshelpers = require("./server/helpers/textConverter")();
     const wcshelpers = require("./server/helpers/conversation")();
     const ExifImage = require('exif').ExifImage;
     const photoHelper = require("./server/helpers/photoProcesser")(ExifImage, cloudantFactory);
@@ -79,7 +77,7 @@
 
 
 	require("./server/helpers/passport")(passport);
-	require("./server/routes/index")(app, upload, ttshelpers, stthelpers, wcshelpers, FileHandler, fs, obj_helper, cloudantFactory, request, photoHelper);
+	require("./server/routes/index")(app, upload, wcshelpers, FileHandler, fs, obj_helper, cloudantFactory, request, photoHelper);
 
 
 
