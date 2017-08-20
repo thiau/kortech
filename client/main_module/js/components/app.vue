@@ -25,10 +25,10 @@
 					</div>
 				</div>
 			</transition-group>
-			<div v-if="results.length <= 0 && this.initial === 0" id="no-results">
+			<div v-if="results.length <= 0 && initial === 0" id="no-results">
 				<span>No results found</span>
 			</div>
-			<div v-if="results.length <= 0 && this.initial === 1" id="no-results">
+			<div v-if="results.length <= 0 && initial === 1" id="no-results">
 				<span>Start querying now</span>
 			</div>
 			<template v-if="this.isLoading">
@@ -86,7 +86,6 @@
 				"startListening": function (debug) {
 					return new Promise((resolve, reject) => {
 						this.isListening = true;
-						this.initial = false;
 						if (!debug) {
 							this.annyang.debug();
 						}
@@ -107,6 +106,7 @@
 								userSaid = userSaid[0];
 							}
 							factory.askWatson(userSaid).then((watsonResponse) => {
+								this.initial = 0;
 								let count = watsonResponse.docs.length;
 								if (count > 0) {
 									watsonResponse.docs.forEach((doc) => {

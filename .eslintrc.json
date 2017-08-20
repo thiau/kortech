@@ -1,0 +1,27 @@
+{
+  "extends": ["eslint:recommended"],
+  "plugins": ["vue"],
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+		"sourceType": "module"
+  },
+  "rules": {
+    "quotes": ["error", "double"],
+    "strict": ["warn", "function"],
+    "no-console": "warn",
+    "no-confusing-arrow": "error",
+    "array-callback-return": "error",
+    "no-empty-function": "error",
+    "keyword-spacing": ["error", {
+      "before": true,
+      "after": true
+    }]
+  }
+}

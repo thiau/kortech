@@ -37,7 +37,7 @@
 				let endHour = data.context.time_end;
 
 				let startDateFinal = new Date([startDate, startHour].join(" "));
-				let endDateFinal = new Date([endDate, startHour].join(" "));
+				let endDateFinal = new Date([endDate, endHour].join(" "));
 
 				let converted = transformDate(startDateFinal, endDateFinal, true);
 
@@ -65,7 +65,18 @@
 					}]
 				}).then(function (docs) {
 					console.log(docs);
-					return res.status(200).send(docs);
+
+					if(data.context.laptop) {
+						return res.status(200).send({
+							"docs": [
+								docs.docs[0],
+								docs.docs[1],
+								docs.docs[2]
+							]
+						});
+					} else {
+						return res.status(200).send(docs);
+					}
 				}).catch(function (err) {
 					return res.status(500).send(err);
 				});

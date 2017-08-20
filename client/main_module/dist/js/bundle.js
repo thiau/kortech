@@ -47,7 +47,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 				return new _promise2.default(function (resolve, reject) {
 					_this.isListening = true;
-					_this.initial = false;
 					if (!debug) {
 						_this.annyang.debug();
 					}
@@ -68,6 +67,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 							userSaid = userSaid[0];
 						}
 						factory.askWatson(userSaid).then(function (watsonResponse) {
+							_this.initial = 0;
 							var count = watsonResponse.docs.length;
 							if (count > 0) {
 								watsonResponse.docs.forEach(function (doc) {
@@ -108,7 +108,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('header-app'),_vm._v(" "),_c('div',{attrs:{"id":"content"}},[_c('div',{class:{ 'animated pulse': _vm.isListening },attrs:{"id":"listen"},on:{"click":_vm.toggleListen}},[(!_vm.isListening)?_c('img',{staticClass:"recording-icon",attrs:{"src":"/assets/sound.svg"}}):_vm._e(),_vm._v(" "),(_vm.isListening)?_c('div',{staticClass:"recording-icon-active"}):_vm._e(),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.isListening ? "Listening" : "Click to listen"))])]),_vm._v(" "),_c('transition-group',{attrs:{"name":"custom-classes-transition","enter-active-class":"animated tada","leave-active-class":"animated bounceOutRight"}},_vm._l((this.results),function(result){return _c('div',{key:result._id,staticClass:"suggestion"},[_c('div',[_c('img',{attrs:{"src":result.picture}})]),_vm._v(" "),_c('div',{staticClass:"timestamp"},[_c('div',[_vm._v("\n\t\t\t\t\t\tTimestamp\n\t\t\t\t\t")]),_vm._v(" "),_c('div',[_vm._v("\n\t\t\t\t\t\t"+_vm._s(result.timestamp)+"\n\t\t\t\t\t")])])])})),_vm._v(" "),(_vm.results.length <= 0 && this.initial === 0)?_c('div',{attrs:{"id":"no-results"}},[_c('span',[_vm._v("No results found")])]):_vm._e(),_vm._v(" "),(_vm.results.length <= 0 && this.initial === 1)?_c('div',{attrs:{"id":"no-results"}},[_c('span',[_vm._v("Start querying now")])]):_vm._e(),_vm._v(" "),(this.isLoading)?[_c('transition',{attrs:{"name":"loading"}},[_c('div',{attrs:{"id":"loading-container"}},[_c('loading',{attrs:{"id":"load","enter-active-class":"animated tada","leave-active-class":"animated bounceOutRight"}})],1)])]:_vm._e()],2)],1)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('header-app'),_vm._v(" "),_c('div',{attrs:{"id":"content"}},[_c('div',{class:{ 'animated pulse': _vm.isListening },attrs:{"id":"listen"},on:{"click":_vm.toggleListen}},[(!_vm.isListening)?_c('img',{staticClass:"recording-icon",attrs:{"src":"/assets/sound.svg"}}):_vm._e(),_vm._v(" "),(_vm.isListening)?_c('div',{staticClass:"recording-icon-active"}):_vm._e(),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.isListening ? "Listening" : "Click to listen"))])]),_vm._v(" "),_c('transition-group',{attrs:{"name":"custom-classes-transition","enter-active-class":"animated tada","leave-active-class":"animated bounceOutRight"}},_vm._l((this.results),function(result){return _c('div',{key:result._id,staticClass:"suggestion"},[_c('div',[_c('img',{attrs:{"src":result.picture}})]),_vm._v(" "),_c('div',{staticClass:"timestamp"},[_c('div',[_vm._v("\n\t\t\t\t\t\tTimestamp\n\t\t\t\t\t")]),_vm._v(" "),_c('div',[_vm._v("\n\t\t\t\t\t\t"+_vm._s(result.timestamp)+"\n\t\t\t\t\t")])])])})),_vm._v(" "),(_vm.results.length <= 0 && _vm.initial === 0)?_c('div',{attrs:{"id":"no-results"}},[_c('span',[_vm._v("No results found")])]):_vm._e(),_vm._v(" "),(_vm.results.length <= 0 && _vm.initial === 1)?_c('div',{attrs:{"id":"no-results"}},[_c('span',[_vm._v("Start querying now")])]):_vm._e(),_vm._v(" "),(this.isLoading)?[_c('transition',{attrs:{"name":"loading"}},[_c('div',{attrs:{"id":"loading-container"}},[_c('loading',{attrs:{"id":"load","enter-active-class":"animated tada","leave-active-class":"animated bounceOutRight"}})],1)])]:_vm._e()],2)],1)}
 __vue__options__.staticRenderFns = []
 __vue__options__._scopeId = "data-v-69a301b2"
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
@@ -124,7 +124,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
 })()}
 
 },{"../factory/factory":4,"./header.vue":2,"./load.vue":3,"annyang":6,"babel-runtime/core-js/promise":8,"vue":80,"vue-hot-reload-api":79,"vueify/lib/insert-css":81}],2:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app-header[data-v-546e9a8c] {\n\tmin-height: 60px;\n\twidth: 100%;\n\tborder-bottom: 1px solid gainsboro;\n\tbox-shadow: 0 1px 5px 2px lightblue;\n\tz-index: 2;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n#app-header img[data-v-546e9a8c] {\n\theight: 35px;\n\twidth: auto;\n}")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app-header[data-v-546e9a8c] {\n\tbackground-color: rgba(0, 0, 0, 0.9);\n\tmin-height: 70px;\n\twidth: 100%;\n\tborder-bottom: 1px solid rgb(210, 210, 210);\n\tbox-shadow: 0 1px 3px 4px rgba(255,255,255, 1);\n\tz-index: 2;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n#app-header img[data-v-546e9a8c] {\n\theight: 35px;\n\twidth: 35px;\n\tmargin-left: 5px;\n}\n\nspan[data-v-546e9a8c] {\n\tcolor: rgba(182, 193, 241, 0.65);\n\tfont-size: 36px;\n\tmargin-left: 5px;\n}")
 ;(function(){
 "use strict";
 
@@ -144,8 +144,8 @@ var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app-hea
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app-header"}},[_vm._v("\n\theader\n")])}
-__vue__options__.staticRenderFns = []
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _vm._m(0)}
+__vue__options__.staticRenderFns = [function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app-header"}},[_c('img',{attrs:{"src":"../main_module/assets/art.png"}}),_vm._v(" "),_c('span',[_vm._v("Kortech")])])}]
 __vue__options__._scopeId = "data-v-546e9a8c"
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
