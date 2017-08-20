@@ -75,18 +75,9 @@
         "limit": "10mb"
     }));
 
-
 	require("./server/helpers/passport")(passport);
 	require("./server/routes/index")(app, upload, wcshelpers, FileHandler, fs, obj_helper, cloudantFactory, request, photoHelper);
-
-	app.get('/test', function (req, res) {
-		obj_helper.get("075df4bb59527949889a9d98c1b018af").then(function (response) {
-			console.log(response.toString('base64'));
-		}).catch(function (err) {
-			console.log(err);
-		});
-	})
-
+	
     server.listen(appPort, function () {
         process.stdout.write(`\nServer running on port: ${appPort}\n`);
     });

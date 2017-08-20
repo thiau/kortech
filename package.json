@@ -33,12 +33,14 @@
     "promise-polyfill": "^6.0.2",
     "request": "^2.81.0",
     "vue": "^2.4.2",
+    "vue-loading-spinner": "^1.0.10",
     "watson-developer-cloud": "^2.38.0"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
-    "babel-runtime": "^6.23.0",
+    "babel-runtime": "^6.26.0",
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
     "chai": "^4.0.2",
@@ -72,5 +74,8 @@
     "vueify": "^9.4.1",
     "watchify": "^3.9.0",
     "yargs": "^8.0.2"
+  },
+  "browser": {
+    "vue": "vue/dist/vue.common.js"
   }
 }

@@ -49,7 +49,7 @@
 			"methods": {
 
 				"toggleListen": function () {
-					if (this.isListening) {
+					if (thisisListening) {
 						this.stopListening();
 					} else {
 						this.startListening();
@@ -84,7 +84,7 @@
 							factory.askWatson(userSaid).then((watsonResponse) => {
 								watsonResponse.docs.forEach((doc) => {
 									factory.getImage(doc._id).then((image) => {
-										doc.picture = "data:image/jpg;base64," + image;
+										doc.picture = "data:image/jpg;base64, + image;
 										this.results.push(doc);
 									});
 								})
