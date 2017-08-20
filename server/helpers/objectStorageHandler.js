@@ -19,7 +19,7 @@
             });
           })
           .catch(function (err) {
-            console.log(err);
+            reject(err);
           })
       },
       "upload": function (name, data) {
