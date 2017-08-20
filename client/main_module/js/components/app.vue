@@ -130,10 +130,7 @@
 				"stopListening": function () {
 					if (this.annyang.isListening()) {
 						this.isListening = false;
-						this.annyang.pause();
-						this.annyang.removeCallback("result", () => {
-							this.annyang.abort();
-						});
+						this.annyang.abort();
 					}
 				}
 			}
