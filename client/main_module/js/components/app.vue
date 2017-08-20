@@ -2,30 +2,46 @@
 	<div id="app">
 		<header-app></header-app>
 		<div id="content">
-			<div @click="toggleListen">
-				{{isListening ? "Listening" : "Click to listen"}}
+			<div @click="toggleListen" id="listen" v-bind:class="{ 'animated pulse': isListening }">
+				<img src="/assets/sound.svg" class="recording-icon"/>
+				<span>{{isListening ? "Listening" : "Click to listen"}}</span>
 			</div>
-			<div v-for="result in this.results" class="suggestion">
-				<div>
-					<img :src="result.picture" />
-				</div>
-				<div class="image-id">
+			<transition-group
+				name="custom-classes-transition"
+				enter-active-class="animated tada"
+				leave-active-class="animated bounceOutRight">
+				<div v-for="result in this.results" class="suggestion" :key="result._id">
 					<div>
-						ID
+						<img :src="result.picture" />
 					</div>
-					<div>
-						{{result._id}}
-					</div>
-				</div>
-				<div class="timestamp">
-					<div>
-						Timestamp
-					</div>
-					<div>
-						{{result.timestamp}}
+					<div class="timestamp">
+						<div>
+							Timestamp
+						</div>
+						<div>
+							{{result.timestamp}}
+						</div>
 					</div>
 				</div>
+			</transition-group>
+			<div v-if="results.length <= 0">
+
 			</div>
+			<template v-if="this.isLoading">
+				<transition name="loading">
+					<div id="loading-container">
+						<loading id="load"
+								 enter-active-class="animated tada"
+								 leave-active-class="animated bounceOutRight">
+
+						</loading>
+					</div>
+				</transition>
+
+
+			</template>
+
+
 		</div>
 	</div>
 </template>
@@ -40,26 +56,27 @@
 				return {
 					"isListening": false,
 					"annyang": require("annyang"),
-					"results": []
+					"results": [],
+					"isLoading": false
 				}
 			},
 			"components": {
-				"headerApp": require("./header.vue")
+				"headerApp": require("./header.vue"),
+				"loading": require("./load.vue")
 			},
 			"methods": {
-
+				"startLoading": function () {
+					this.isLoading = true;
+				},
+				"stopLoading": function () {
+					this.isLoading = false;
+				},
 				"toggleListen": function () {
 					if (this.isListening) {
 						this.stopListening();
 					} else {
 						this.startListening();
 					}
-				},
-				"getImage": function (id) {
-					factory.getImage(doc._id).then((image) => {
-						doc.picture = 'data:image/jpg;base64,' + image;
-						this.results.push(doc);
-					});
 				},
 				"startListening": function (debug) {
 					return new Promise((resolve, reject) => {
@@ -73,21 +90,33 @@
 							this.annyang.start();
 						}
 
-						this.annyang.addCallback("error", function(error) {
+						this.annyang.addCallback("error", (error) => {
+							this.stopListening();
 							reject(error);
 						});
 						this.annyang.addCallback("result", (userSaid) => {
+							this.startLoading();
 							this.results = [];
 							if (Array.isArray(userSaid)) {
 								userSaid = userSaid[0];
 							}
 							factory.askWatson(userSaid).then((watsonResponse) => {
-								watsonResponse.docs.forEach((doc) => {
-									factory.getImage(doc._id).then((image) => {
-										doc.picture = 'data:image/jpg;base64,' + image;
-										this.results.push(doc);
+								let count = watsonResponse.docs.length;
+								if (count > 0) {
+									watsonResponse.docs.forEach((doc) => {
+										factory.getImage(doc._id).then((image) => {
+											doc.picture = "data:image/jpg;base64," + image;
+											this.results.push(doc);
+											count -= 1;
+											if (count <= 0) {
+												this.stopLoading();
+											}
+										});
 									});
-								})
+								} else {
+									this.stopLoading();
+								}
+
 							}).catch((err) => {
 								reject(err);
 							});
@@ -98,7 +127,6 @@
 				"stopListening": function () {
 					if (this.annyang.isListening()) {
 						this.isListening = false;
-						console.log(this.annyang);
 						this.annyang.pause();
 						this.annyang.removeCallback("result", () => {
 							this.annyang.abort();
@@ -121,15 +149,49 @@
 	}
 
 	#content {
-		overflow-y: scroll;
+		overflow-y: auto;
 		max-height: 100%;
 		width: 100%;
 		height: 100%;
 		background-color: azure;
 	}
 
+
 	#app > * {
 		box-sizing: inherit;
+	}
+
+	#listen {
+		background: white;
+		border: 1px solid gainsboro;
+		margin: 20px;
+		padding: 10px;
+		box-sizing: border-box;
+		border-radius: 5px;
+		letter-spacing: 1px;
+		cursor: pointer;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+	}
+
+	#listen.animated {
+		box-shadow: 0 1px 2px rgba(14, 113, 150, 0.55);
+	}
+
+
+	#loading-container {
+		width: 100%;
+		height: 30%;
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+	}
+
+	#load {
+		width: 120px !important;
+		height: 120px !important;
 	}
 
 	.suggestion {
@@ -152,6 +214,11 @@
 		width: 50px;
 		height: 50px;
 		display: block;
+	}
+
+	.recording-icon {
+		width: 35px;
+		height: 35px;
 	}
 
 </style>
