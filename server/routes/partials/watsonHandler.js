@@ -2,90 +2,74 @@
 	"use strict";
 
 
-	module.exports = function (app, upload, watsonTextToSpeech, watsonSpeechToText, watsonConversation, FileHandler, fs) {
+	module.exports = function (app, upload, FileHandler, fs, cloudantFactory, watsonConversation, obj_helper) {
+		let imageDB = cloudantFactory("img_metadata");
+		let transformDate = require("../../helpers/dateRange").transformDate;
 
-		app.post("/convertAudioToText", upload.single("audio"), function (req, res) {
-			FileHandler.saveFile("test", req.file).then(function (filePath) {
-				watsonSpeechToText.convertAudioToText(filePath).then(function (data) {
-					FileHandler.deleteFile(filePath).then(function () {
-						let msg;
-						try {
-							msg = data.results[0].alternatives[0].transcript;
-						} catch (e) {
-							msg = "Invalid";
-						}
-						watsonConversation.sendMessage({
-							"input": {
-								"text": msg
-							},
-							"context": {},
-							"workspace_id": ""
-						}).then(function (conversationData) {
-							watsonTextToSpeech.convertTextToAudio({
-								"fileName": "converted",
-								"textMessage": conversationData.output.text[0]
-							}).then(function (ttsData) {
-								return res.status(200).send({
-									"tts": ttsData,
-									"stt": data.results,
-									"conversation": conversationData
-								});
-							}, function (err) {
-								console.log(err);
-								return res.status(500).send(err);
-							});
 
-						}, function (err) {
-							console.log(err);
-							return res.status(500).send(err);
-						});
-					}, function (err) {
-						return res.status(500).send(err);
-					});
-				}, function (err) {
-					console.log(err);
-					return res.status(500).send(err);
-				});
+		app.get("/getImageById", function (req, res) {
+			if (!req.query.id) {
+				return res.status(500).send("Can not proceed without ID");
+			}
+			obj_helper.get(req.query.id).then(function (imageData) {
+				console.log(imageData);
+				return res.status(200).send(imageData);
 			}, function (err) {
 				return res.status(500).send(err);
 			});
 		});
 
-		app.post("/convertTextToAudio", function (req, res) {
-			watsonTextToSpeech.convertTextToAudio({
-				"fileName": "converted",
-				"textMessage": req.body.textMessage
-			}).then(function (data) {
-				return res.status(200).send(data);
-			}, function (err) {
-				console.log(err);
-				return res.status(500).send(err);
-			});
-		});
-
-		app.post("/askWatson", function (req, res) {
-			var context;
+		app.post("/query", function (req, res) {
 			if (!req.query.question && !req.body.question) {
 				return res.status(403).send("Can not proceed without question property");
 			}
-
-			if (req.body.context) {
-				try {
-					context = JSON.parse(req.body.context);
-				} catch (e) {
-					context = req.body.context;
-				}
-			} else {
-				context = {};
-			}
-
 			watsonConversation.sendMessage({
 				"input": {
 					"text": req.body.question
 				},
-				"context": context
+				"context": {}
 			}).then(function (data) {
-				return res.status(200).send(data);
+
+				console.log(data.context);
+
+				let startDate = data.context.date_init;
+				let endDate = data.context.date_end || data.context.date_init;
+				let startHour = data.context.time_init;
+				let endHour = data.context.time_end;
+
+				startDate = new Date([startDate, startHour].join(" "));
+				endDate = new Date([endDate, startHour].join(" "));
+
+				let converted = transformDate(startDate, endDate, true);
+
+				if (startHour === endHour) {
+					converted.end += 900000;
+				}
+				console.log(converted);
+
+				imageDB.get({
+					"selector": {
+						"person": data.context.person,
+						"laptop": data.context.laptop,
+						"$and": [{
+							"timestamp": {
+								"$gte": converted.start
+							}
+						}, {
+							"timestamp": {
+								"$lte": converted.end
+							}
+						}]
+					},
+					"sort": [{
+						"timestamp": "asc"
+					}]
+				}).then(function (docs) {
+					console.log(docs);
+					return res.status(200).send(docs);
+				}).catch(function (err) {
+					return res.status(500).send(err);
+				});
 			}, function (err) {
 				console.log(err);
 				return res.status(500).send(err);

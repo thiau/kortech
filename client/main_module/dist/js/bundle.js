@@ -12,55 +12,87 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 (function () {
 	"use strict";
 
-	var annyang = require("annyang");
 	var factory = require("../factory/factory");
 	module.exports = {
 		"name": "app",
 		"data": function data() {
-			return {};
+			return {
+				"isListening": false,
+				"annyang": require("annyang"),
+				"results": []
+			};
 		},
 		"components": {
 			"headerApp": require("./header.vue")
 		},
 		"methods": {
-			"start": function start(debug) {
-				return new _promise2.default(function (resolve) {
+			"changeListeningStatus": function changeListeningStatus() {
+				this.isListening = !this.isListening;
+			},
+			"toggleListen": function toggleListen() {
+				if (this.isListening) {
+					this.stopListening();
+				} else {
+					this.startListening();
+				}
+			},
+			"startListening": function startListening(debug) {
+				var _this = this;
+
+				return new _promise2.default(function (resolve, reject) {
+					_this.changeListeningStatus();
 					if (!debug) {
-						annyang.debug();
+						_this.annyang.debug();
 					}
 
-					annyang.start();
-					annyang.addCallback("result", function (userSaid) {
+					if (!_this.annyang.isListening()) {
+						_this.annyang.setLanguage("pt-BR");
+						_this.annyang.start();
+					}
+
+					_this.annyang.addCallback("error", function (error) {
+						reject(error);
+					});
+					_this.annyang.addCallback("result", function (userSaid) {
+						_this.results = [];
 						if (Array.isArray(userSaid)) {
 							userSaid = userSaid[0];
 						}
-
 						factory.askWatson(userSaid).then(function (watsonResponse) {
-							console.log(watsonResponse);
-							resolve(watsonResponse);
-						}).then(function () {
-							annyang.removeCallback("result");
-							annyang.abort();
+							watsonResponse.docs.forEach(function (doc) {
+								factory.getImage(doc._id).then(function (image) {
+									var binary = btoa(String.fromCharCode.call(null, image));
+									console.log(binary);
+									doc.picture = 'data:image/png;base64,' + binary;
+									_this.results.push(doc);
+								});
+							});
+						}).catch(function (err) {
+							reject(err);
 						});
-						console.log(userSaid);
+						_this.stopListening();
 					});
 				});
 			},
-			"stop": function stop() {
-				if (annyang.isListening()) {
-					annyang.removeCallback("result");
-					annyang.abort();
+			"stopListening": function stopListening() {
+				var _this2 = this;
+
+				if (this.annyang.isListening()) {
+					this.changeListeningStatus();
+					console.log(this.annyang);
+					this.annyang.removeCallback("result", function () {
+						_this2.annyang.pause();
+					});
 				}
 			}
 		}
-
 	};
 })();
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('header-app'),_vm._v(" "),_c('div',{attrs:{"id":"content"}},[_vm._v("\n\t\toix\n\t")])],1)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('header-app'),_vm._v(" "),_c('div',{attrs:{"id":"content"}},[_c('div',{on:{"click":_vm.toggleListen}},[_vm._v("\n\t\t\t"+_vm._s(_vm.isListening ? "Listening" : "Click to listen")+"\n\t\t")]),_vm._v(" "),_vm._l((this.results),function(result){return _c('div',[_vm._v("\n\t\t\t"+_vm._s(result)+"\n\t\t\t"),_c('img',{attrs:{"src":result.image}})])})],2)],1)}
 __vue__options__.staticRenderFns = []
 __vue__options__._scopeId = "data-v-69a301b2"
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
@@ -71,12 +103,12 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-69a301b2", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-69a301b2", __vue__options__)
+    hotAPI.reload("data-v-69a301b2", __vue__options__)
   }
 })()}
 
-},{"../factory/factory":3,"./header.vue":2,"annyang":5,"babel-runtime/core-js/promise":7,"vue":80,"vue-hot-reload-api":79,"vueify/lib/insert-css":81}],2:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app-header[data-v-546e9a8c] {\n\tflex: 1;\n\tmin-height: 60px;\n\twidth: 100%;\n\tborder-bottom: 1px solid gainsboro;\n\tbox-shadow: 0 1px 5px 2px lightblue;\n\tz-index: 2;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n#app-header img[data-v-546e9a8c] {\n\theight: 35px;\n\twidth: auto;\n}")
+},{"../factory/factory":3,"./header.vue":2,"annyang":5,"babel-runtime/core-js/promise":7,"vue":79,"vue-hot-reload-api":78,"vueify/lib/insert-css":80}],2:[function(require,module,exports){
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app-header[data-v-546e9a8c] {\n\tmin-height: 60px;\n\twidth: 100%;\n\tborder-bottom: 1px solid gainsboro;\n\tbox-shadow: 0 1px 5px 2px lightblue;\n\tz-index: 2;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n#app-header img[data-v-546e9a8c] {\n\theight: 35px;\n\twidth: auto;\n}")
 ;(function(){
 "use strict";
 
@@ -111,7 +143,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   }
 })()}
 
-},{"vue":80,"vue-hot-reload-api":79,"vueify/lib/insert-css":81}],3:[function(require,module,exports){
+},{"vue":79,"vue-hot-reload-api":78,"vueify/lib/insert-css":80}],3:[function(require,module,exports){
 "use strict";
 
 var _stringify = require("babel-runtime/core-js/json/stringify");
@@ -128,97 +160,79 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Created by danielabrao on 3/27/17.
  */
 (function () {
-    "use strict";
+	"use strict";
 
-    module.exports = function (window) {
+	module.exports = {
+		"askWatson": function askWatson(question) {
+			return new _promise2.default(function (resolve, reject) {
+				if (!question) {
+					return reject("Can not proceed without credentials");
+				}
 
-        var urls = {
-            "askWatson": "/askWatson"
-        };
+				if (window.XMLHttpRequest) {
+					var xhttp = new window.XMLHttpRequest();
+					xhttp.onreadystatechange = function () {
+						if (xhttp.readyState === 4) {
+							if (xhttp.status === 200 || xhttp.status === 201) {
+								if (xhttp.responseText) {
+									try {
+										resolve(JSON.parse(xhttp.responseText));
+									} catch (e) {
+										resolve(xhttp.responseText);
+									}
+								} else {
+									reject("An error occurred: Empty response");
+								}
+							} else {
+								reject(["An error occurred:", xhttp.responseText].join());
+							}
+						}
+					};
 
-        if (!window.Promise) {
-            window.Promise = require("promise-polyfill");
-        }
+					xhttp.open("POST", "/query");
+					xhttp.setRequestHeader("content-type", "application/json");
+					xhttp.send((0, _stringify2.default)({
+						"question": question
+					}));
+				} else {
+					reject("AJAX Calls not supported on this browser");
+				}
+			});
+		},
+		"getImage": function getImage(imageId) {
+			return new _promise2.default(function (resolve, reject) {
 
-        return {
-            "setUrl": function setUrl(url, type) {
-                urls[type] = url;
-            },
-            "getUrl": function getUrl(type) {
-                return urls[type] || "Invalid URL requested";
-            },
-            "askWatson": function askWatson(question) {
-                return new _promise2.default(function (resolve, reject) {
-                    if (!question) {
-                        return reject("Can not proceed without credentials");
-                    }
+				if (window.XMLHttpRequest) {
+					var xhttp = new window.XMLHttpRequest();
+					xhttp.onreadystatechange = function () {
+						if (xhttp.readyState === 4) {
+							if (xhttp.status === 200 || xhttp.status === 201) {
+								if (xhttp.responseText) {
+									try {
+										resolve(JSON.parse(xhttp.responseText));
+									} catch (e) {
+										resolve(xhttp.responseText);
+									}
+								} else {
+									reject("An error occurred: Empty response");
+								}
+							} else {
+								reject(["An error occurred:", xhttp.responseText].join());
+							}
+						}
+					};
 
-                    if (window.XMLHttpRequest) {
-                        var xhttp = new window.XMLHttpRequest();
-                        xhttp.onreadystatechange = function () {
-                            if (xhttp.readyState === 4) {
-                                if (xhttp.status === 200 || xhttp.status === 201) {
-                                    if (xhttp.responseText) {
-                                        try {
-                                            resolve(JSON.parse(xhttp.responseText));
-                                        } catch (e) {
-                                            resolve(xhttp.responseText);
-                                        }
-                                    } else {
-                                        reject("An error occurred: Empty response");
-                                    }
-                                } else {
-                                    reject(["An error occurred:", xhttp.responseText].join());
-                                }
-                            }
-                        };
-
-                        xhttp.open("POST", urls.askWatson);
-                        xhttp.setRequestHeader("content-type", "application/json");
-                        xhttp.send((0, _stringify2.default)({
-                            "question": question
-                        }));
-                    } else {
-                        reject("AJAX Calls not supported on this browser");
-                    }
-                });
-            },
-            "getModel": function getModel() {
-                return new _promise2.default(function (resolve, reject) {
-
-                    if (window.XMLHttpRequest) {
-
-                        var xhttp = new window.XMLHttpRequest();
-                        xhttp.onreadystatechange = function () {
-                            if (xhttp.readyState === 4) {
-                                if (xhttp.status === 200) {
-                                    if (xhttp.responseText) {
-                                        try {
-                                            resolve(JSON.parse(xhttp.responseText));
-                                        } catch (e) {
-                                            resolve(xhttp.responseText);
-                                        }
-                                    } else {
-                                        reject("An error occurred: Empty response");
-                                    }
-                                } else {
-                                    reject(["An error occurred: ", xhttp.responseText].join());
-                                }
-                            }
-                        };
-
-                        xhttp.open("GET", urls.urlModel);
-                        xhttp.send();
-                    } else {
-                        reject("AJAX Calls not supported on this browser");
-                    }
-                });
-            }
-        };
-    };
+					xhttp.open("GET", "/getImageById?id=" + imageId);
+					xhttp.send();
+				} else {
+					reject("AJAX Calls not supported on this browser");
+				}
+			});
+		}
+	};
 })();
 
-},{"babel-runtime/core-js/json/stringify":6,"babel-runtime/core-js/promise":7,"promise-polyfill":78}],4:[function(require,module,exports){
+},{"babel-runtime/core-js/json/stringify":6,"babel-runtime/core-js/promise":7}],4:[function(require,module,exports){
 "use strict";
 
 /**
@@ -237,7 +251,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 	});
 })();
 
-},{"./components/app.vue":1,"vue":80}],5:[function(require,module,exports){
+},{"./components/app.vue":1,"vue":79}],5:[function(require,module,exports){
 "use strict";var _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(a){return typeof a}:function(a){return a&&"function"==typeof Symbol&&a.constructor===Symbol&&a!==Symbol.prototype?"symbol":typeof a};
 //! annyang
 //! version : 2.6.0
@@ -1603,241 +1617,6 @@ for (var i = 0; i < DOMIterables.length; i++) {
 }
 
 },{"./_global":26,"./_hide":28,"./_iterators":40,"./_wks":69,"./es6.array.iterator":71}],78:[function(require,module,exports){
-(function (root) {
-
-  // Store setTimeout reference so promise-polyfill will be unaffected by
-  // other code modifying setTimeout (like sinon.useFakeTimers())
-  var setTimeoutFunc = setTimeout;
-
-  function noop() {}
-  
-  // Polyfill for Function.prototype.bind
-  function bind(fn, thisArg) {
-    return function () {
-      fn.apply(thisArg, arguments);
-    };
-  }
-
-  function Promise(fn) {
-    if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new');
-    if (typeof fn !== 'function') throw new TypeError('not a function');
-    this._state = 0;
-    this._handled = false;
-    this._value = undefined;
-    this._deferreds = [];
-
-    doResolve(fn, this);
-  }
-
-  function handle(self, deferred) {
-    while (self._state === 3) {
-      self = self._value;
-    }
-    if (self._state === 0) {
-      self._deferreds.push(deferred);
-      return;
-    }
-    self._handled = true;
-    Promise._immediateFn(function () {
-      var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
-      if (cb === null) {
-        (self._state === 1 ? resolve : reject)(deferred.promise, self._value);
-        return;
-      }
-      var ret;
-      try {
-        ret = cb(self._value);
-      } catch (e) {
-        reject(deferred.promise, e);
-        return;
-      }
-      resolve(deferred.promise, ret);
-    });
-  }
-
-  function resolve(self, newValue) {
-    try {
-      // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-      if (newValue === self) throw new TypeError('A promise cannot be resolved with itself.');
-      if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
-        var then = newValue.then;
-        if (newValue instanceof Promise) {
-          self._state = 3;
-          self._value = newValue;
-          finale(self);
-          return;
-        } else if (typeof then === 'function') {
-          doResolve(bind(then, newValue), self);
-          return;
-        }
-      }
-      self._state = 1;
-      self._value = newValue;
-      finale(self);
-    } catch (e) {
-      reject(self, e);
-    }
-  }
-
-  function reject(self, newValue) {
-    self._state = 2;
-    self._value = newValue;
-    finale(self);
-  }
-
-  function finale(self) {
-    if (self._state === 2 && self._deferreds.length === 0) {
-      Promise._immediateFn(function() {
-        if (!self._handled) {
-          Promise._unhandledRejectionFn(self._value);
-        }
-      });
-    }
-
-    for (var i = 0, len = self._deferreds.length; i < len; i++) {
-      handle(self, self._deferreds[i]);
-    }
-    self._deferreds = null;
-  }
-
-  function Handler(onFulfilled, onRejected, promise) {
-    this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
-    this.onRejected = typeof onRejected === 'function' ? onRejected : null;
-    this.promise = promise;
-  }
-
-  /**
-   * Take a potentially misbehaving resolver function and make sure
-   * onFulfilled and onRejected are only called once.
-   *
-   * Makes no guarantees about asynchrony.
-   */
-  function doResolve(fn, self) {
-    var done = false;
-    try {
-      fn(function (value) {
-        if (done) return;
-        done = true;
-        resolve(self, value);
-      }, function (reason) {
-        if (done) return;
-        done = true;
-        reject(self, reason);
-      });
-    } catch (ex) {
-      if (done) return;
-      done = true;
-      reject(self, ex);
-    }
-  }
-
-  Promise.prototype['catch'] = function (onRejected) {
-    return this.then(null, onRejected);
-  };
-
-  Promise.prototype.then = function (onFulfilled, onRejected) {
-    var prom = new (this.constructor)(noop);
-
-    handle(this, new Handler(onFulfilled, onRejected, prom));
-    return prom;
-  };
-
-  Promise.all = function (arr) {
-    var args = Array.prototype.slice.call(arr);
-
-    return new Promise(function (resolve, reject) {
-      if (args.length === 0) return resolve([]);
-      var remaining = args.length;
-
-      function res(i, val) {
-        try {
-          if (val && (typeof val === 'object' || typeof val === 'function')) {
-            var then = val.then;
-            if (typeof then === 'function') {
-              then.call(val, function (val) {
-                res(i, val);
-              }, reject);
-              return;
-            }
-          }
-          args[i] = val;
-          if (--remaining === 0) {
-            resolve(args);
-          }
-        } catch (ex) {
-          reject(ex);
-        }
-      }
-
-      for (var i = 0; i < args.length; i++) {
-        res(i, args[i]);
-      }
-    });
-  };
-
-  Promise.resolve = function (value) {
-    if (value && typeof value === 'object' && value.constructor === Promise) {
-      return value;
-    }
-
-    return new Promise(function (resolve) {
-      resolve(value);
-    });
-  };
-
-  Promise.reject = function (value) {
-    return new Promise(function (resolve, reject) {
-      reject(value);
-    });
-  };
-
-  Promise.race = function (values) {
-    return new Promise(function (resolve, reject) {
-      for (var i = 0, len = values.length; i < len; i++) {
-        values[i].then(resolve, reject);
-      }
-    });
-  };
-
-  // Use polyfill for setImmediate for performance gains
-  Promise._immediateFn = (typeof setImmediate === 'function' && function (fn) { setImmediate(fn); }) ||
-    function (fn) {
-      setTimeoutFunc(fn, 0);
-    };
-
-  Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
-    if (typeof console !== 'undefined' && console) {
-      console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
-    }
-  };
-
-  /**
-   * Set the immediate function to execute callbacks
-   * @param fn {function} Function to execute
-   * @deprecated
-   */
-  Promise._setImmediateFn = function _setImmediateFn(fn) {
-    Promise._immediateFn = fn;
-  };
-
-  /**
-   * Change the function to execute on unhandled rejection
-   * @param {function} fn Function to execute on unhandled rejection
-   * @deprecated
-   */
-  Promise._setUnhandledRejectionFn = function _setUnhandledRejectionFn(fn) {
-    Promise._unhandledRejectionFn = fn;
-  };
-  
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Promise;
-  } else if (!root.Promise) {
-    root.Promise = Promise;
-  }
-
-})(this);
-
-},{}],79:[function(require,module,exports){
 var Vue // late bind
 var version
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
@@ -1983,7 +1762,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],80:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 (function (global){
 /*!
  * Vue.js v2.4.2
@@ -9417,7 +9196,7 @@ module.exports = Vue$3;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],81:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 function noop () {}

@@ -4,94 +4,78 @@
 (function () {
     "use strict";
 
-    module.exports = function (window) {
+    module.exports = {
+		"askWatson": function (question) {
+			return new Promise(function (resolve, reject) {
+				if (!question) {
+					return reject("Can not proceed without credentials");
+				}
 
-        let urls = {
-            "askWatson": "/askWatson"
-        };
+				if (window.XMLHttpRequest) {
+					let xhttp = new window.XMLHttpRequest();
+					xhttp.onreadystatechange = function() {
+						if (xhttp.readyState === 4) {
+							if (xhttp.status === 200 || xhttp.status === 201) {
+								if (xhttp.responseText) {
+									try {
+										resolve(JSON.parse(xhttp.responseText));
+									} catch (e) {
+										resolve(xhttp.responseText);
+									}
+								} else {
+									reject("An error occurred: Empty response");
+								}
 
-        if (!window.Promise) {
-            window.Promise = require("promise-polyfill");
-        }
+							} else {
+								reject(["An error occurred:", xhttp.responseText].join());
+							}
+						}
+					};
 
-        return {
-            "setUrl": function (url, type) {
-                urls[type] = url;
-            },
-            "getUrl": function (type) {
-                return urls[type] || "Invalid URL requested";
-            },
-            "askWatson": function (question) {
-                return new Promise(function (resolve, reject) {
-                    if (!question) {
-                        return reject("Can not proceed without credentials");
-                    }
+					xhttp.open("POST", "/query");
+					xhttp.setRequestHeader("content-type", "application/json");
+					xhttp.send(JSON.stringify({
+						"question": question
+					}));
 
-                    if (window.XMLHttpRequest) {
-                        let xhttp = new window.XMLHttpRequest();
-                        xhttp.onreadystatechange = function() {
-                            if (xhttp.readyState === 4) {
-                                if (xhttp.status === 200 || xhttp.status === 201) {
-                                    if (xhttp.responseText) {
-                                        try {
-                                            resolve(JSON.parse(xhttp.responseText));
-                                        } catch (e) {
-                                            resolve(xhttp.responseText);
-                                        }
-                                    } else {
-                                        reject("An error occurred: Empty response");
-                                    }
+				} else {
+					reject("AJAX Calls not supported on this browser");
+				}
+			});
+		},
+		"getImage": function (imageId) {
+			return new Promise(function (resolve, reject) {
 
-                                } else {
-                                    reject(["An error occurred:", xhttp.responseText].join());
-                                }
-                            }
-                        };
+				if (window.XMLHttpRequest) {
+					let xhttp = new window.XMLHttpRequest();
+					xhttp.onreadystatechange = function() {
+						if (xhttp.readyState === 4) {
+							if (xhttp.status === 200 || xhttp.status === 201) {
+								if (xhttp.responseText) {
+									try {
+										resolve(JSON.parse(xhttp.responseText));
+									} catch (e) {
+										resolve(xhttp.responseText);
+									}
+								} else {
+									reject("An error occurred: Empty response");
+								}
 
-                        xhttp.open("POST", urls.askWatson);
-                        xhttp.setRequestHeader("content-type", "application/json");
-                        xhttp.send(JSON.stringify({
-                            "question": question
-                        }));
+							} else {
+								reject(["An error occurred:", xhttp.responseText].join());
+							}
+						}
+					};
 
-                    } else {
-                        reject("AJAX Calls not supported on this browser");
-                    }
-                });
-            },
-            "getModel": function () {
-                return new Promise(function (resolve, reject) {
+					xhttp.open("GET", "/getImageById?id=" + imageId);
+					xhttp.send();
 
-                    if (window.XMLHttpRequest) {
+				} else {
+					reject("AJAX Calls not supported on this browser");
+				}
+			});
 
-                        let xhttp = new window.XMLHttpRequest();
-                        xhttp.onreadystatechange = function() {
-                            if (xhttp.readyState === 4) {
-                                if (xhttp.status === 200) {
-                                    if (xhttp.responseText) {
-                                        try {
-                                            resolve(JSON.parse(xhttp.responseText));
-                                        } catch (e) {
-                                            resolve(xhttp.responseText);
-                                        }
-                                    } else {
-                                        reject("An error occurred: Empty response");
-                                    }
-
-                                } else {
-                                    reject(["An error occurred: ", xhttp.responseText].join());
-                                }
-                            }
-                        };
-
-                        xhttp.open("GET", urls.urlModel);
-                        xhttp.send();
-                    } else {
-                        reject("AJAX Calls not supported on this browser");
-                    }
-                });
-            }
-        };
+		}
     };
 
 }());

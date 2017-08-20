@@ -21,7 +21,6 @@
 </script>
 <style scoped>
 	#app-header {
-		flex: 1;
 		min-height: 60px;
 		width: 100%;
 		border-bottom: 1px solid gainsboro;
