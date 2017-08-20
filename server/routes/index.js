@@ -21,7 +21,7 @@
         });
 
         app.post("/test_os", function (req, res) {
-            obj_helper().teste("foto.jpg");
+            obj_helper.get("106a97ecc47e84f20f47b78752106505");
             res.send("foi");
         });
     };
