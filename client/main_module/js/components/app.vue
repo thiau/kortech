@@ -4,49 +4,41 @@
 		<div id="content">
 			<div @click="toggleListen" id="listen" v-bind:class="{ 'animated pulse': isListening }">
 				<img v-if="!isListening" src="/assets/sound.svg" class="recording-icon"/>
-				<div v-if="isListening" class="recording-icon-active"/>
+				<div v-if="isListening" class="recording-icon-active"></div>
 				<span>{{isListening ? "Listening" : "Click to listen"}}</span>
 			</div>
 			<transition-group
 				name="custom-classes-transition"
-				enter-active-class="animated tada"
-				leave-active-class="animated bounceOutRight">
-				<div v-for="result in this.results" class="suggestion" :key="result._id">
-					<div>
-						<img :src="result.picture" />
-					</div>
-					<div class="timestamp">
-						<div>
-							Timestamp
-						</div>
-						<div>
-							{{result.timestamp}}
-						</div>
-					</div>
-				</div>
+				enter-active-class="animated fadeIn">
+				<suggestion-item v-for="result in this.results" class="suggestion" :key="result._id" :suggestion="result">
+				</suggestion-item>
 			</transition-group>
-			<div v-if="results.length <= 0 && initial === 0" id="no-results">
+			<div v-if="results.length <= 0 && initial === 0 && !isLoading" id="no-results">
+				<img src="/assets/fail.svg" />
 				<span>No results found</span>
 			</div>
-			<div v-if="results.length <= 0 && initial === 1" id="no-results">
-				<span>Start querying now</span>
+			<div v-if="results.length <= 0 && initial === 1 && !isLoading" id="no-results">
+				<img src="/assets/start.svg" />
+				<span>Start querying pressing the button below</span>
 			</div>
 			<template v-if="this.isLoading">
-				<transition name="loading">
-					<div id="loading-container">
-						<loading id="load"
-								 enter-active-class="animated tada"
-								 leave-active-class="animated bounceOutRight">
-
-						</loading>
-					</div>
-				</transition>
-
-
+				<div id="loading-container">
+					<loading id="load">
+					</loading>
+				</div>
 			</template>
-
-
 		</div>
+
+		<transition name="toast"
+					enter-active-class="animated slideInUp"
+					leave-active-class="animated slideOutDown">
+			<template v-if="userInput">
+				<div id="toast">
+					Text recognized: {{userInput}}
+				</div>
+			</template>
+		</transition>
+
 	</div>
 </template>
 
@@ -62,12 +54,14 @@
 					"annyang": require("annyang"),
 					"results": [],
 					"isLoading": false,
-					"initial": 1
+					"initial": 1,
+					"userInput": ""
 				}
 			},
 			"components": {
 				"headerApp": require("./header.vue"),
-				"loading": require("./load.vue")
+				"loading": require("./load.vue"),
+				"suggestionItem": require("./suggestion.vue")
 			},
 			"methods": {
 				"startLoading": function () {
@@ -85,6 +79,7 @@
 				},
 				"startListening": function (debug) {
 					return new Promise((resolve, reject) => {
+						this.userInput = "";
 						this.isListening = true;
 						if (!debug) {
 							this.annyang.debug();
@@ -95,6 +90,7 @@
 							this.annyang.start();
 						}
 
+						this.annyang.removeCallback();
 						this.annyang.addCallback("error", (error) => {
 							this.stopListening();
 							reject(error);
@@ -104,6 +100,7 @@
 							this.results = [];
 							if (Array.isArray(userSaid)) {
 								userSaid = userSaid[0];
+								this.userInput = userSaid;
 							}
 							factory.askWatson(userSaid).then((watsonResponse) => {
 								this.initial = 0;
@@ -204,7 +201,6 @@
 		background-color: white;
 		/* width: 50%; */
 		border: 1px solid gainsboro;
-		padding: 20px;
 		margin: 10px;
 		box-sizing: border-box;
 		display: flex;
@@ -212,15 +208,26 @@
 		flex-direction: column;
 		/* width: 100%; */
 		height: 250px;
-		justify-content: center;
-		align-items: center;
+		justify-content: space-between;
+		overflow: hidden;
 	}
 
 	.suggestion img {
-		width: 50px;
-		height: 50px;
+		width: 100%;
+		flex: 1;
+		height: 90%;
 		display: block;
+		max-height: 100%;
 	}
+
+	.suggestion .timestamp {
+		color: gray;
+		font-size: 8px;
+		letter-spacing: 1px;
+		align-self: flex-end;
+		margin: 5px;
+	}
+
 
 	.recording-icon {
 		width: 35px;
@@ -241,6 +248,26 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		font-size: 20px;
+		user-select: none;
+		cursor: default;
+		flex-direction: column;
+	}
+
+	#no-results img {
+		max-height: 100%;
+		max-width: 100%;
+		height: 200px;
+	}
+
+	#toast {
+		background-color: rgba(0, 0, 0, 0.9);
+		color: white;
+		min-height: 60px;
+		display: flex;
+		justify-content: left;
+		align-items: center;
+		padding: 10px;
 	}
 
 

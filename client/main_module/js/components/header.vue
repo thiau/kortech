@@ -1,7 +1,9 @@
 <template>
 	<div id="app-header">
-		<img src="../main_module/assets/art.png" />
-		<span>Kortech</span>
+		<a href="/">
+			<img src="../main_module/assets/art.png" />
+			<span>Kortech</span>
+		</a>
 	</div>
 </template>
 
@@ -43,6 +45,12 @@
 		color: rgba(182, 193, 241, 0.65);
 		font-size: 36px;
 		margin-left: 5px;
+	}
+
+	a {
+		text-decoration: none;
+		display: flex;
+		align-items: center;
 	}
 
 </style>

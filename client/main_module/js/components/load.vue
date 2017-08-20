@@ -14,27 +14,30 @@
 </template>
 
 <script>
-	module.exports ={
-		props: {
-			size: {
-				default: "120px"
-			}
-		},
-		computed: {
-			innerStyles () {
-				let size = parseInt(this.size) / 2
-				return {
-					transform: "scale(" + (size / 75) + ")"
+	(function () {
+		"use strict";
+		module.exports ={
+			props: {
+				size: {
+					default: "120px"
 				}
 			},
-			styles () {
-				return {
-					width: this.size,
-					height: this.size
+			computed: {
+				innerStyles () {
+					let size = parseInt(this.size) / 2
+					return {
+						transform: "scale(" + (size / 75) + ")"
+					}
+				},
+				styles () {
+					return {
+						width: this.size,
+						height: this.size
+					}
 				}
 			}
 		}
-	}
+	}());
 </script>
 
 <style lang="scss" scoped>
