@@ -12,7 +12,7 @@
                 return new Promise(function (resolve, reject) {
                     objectStorage.getContainer("images").then(function (container) {
                             container.getObject(imageName).then(function (obj) {
-                                obj.load(false).then(function (content) {
+                                obj.load(false, true).then(function (content) {
                                     // console.log("Buffer", Buffer.from(content));
                                     // console.log("Content", content)
                                     resolve(Buffer.from(content).toString('base64'));
