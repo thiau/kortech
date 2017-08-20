@@ -15,7 +15,7 @@
 					container.getObject(imageName).then(function (obj) {
 						obj.load(false)
 							.then(function (content) {
-								resolve(content);
+								resolve(Buffer.from(content));
 							})
 					});
 				})

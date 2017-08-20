@@ -5,8 +5,23 @@
 			<div @click="toggleListen">
 				{{isListening ? "Listening" : "Click to listen"}}
 			</div>
-			<div v-for="result in this.results">
-				{{result}}
+			<div v-for="result in this.results" class="suggestion">
+				<div class="image-id">
+					<h6>
+						ID
+					</h6>
+					<span>
+						{{result._id}}
+					</span>
+				</div>
+				<div class="timestamp">
+					<h6>
+						Timestamp
+					</h6>
+					<span>
+						{{result.timestamp}}
+					</span>
+				</div>
 				<img :src="result.image" />
 			</div>
 		</div>
@@ -63,9 +78,7 @@
 							factory.askWatson(userSaid).then((watsonResponse) => {
 								watsonResponse.docs.forEach((doc) => {
 									factory.getImage(doc._id).then((image) => {
-										let binary = btoa(String.fromCharCode.call(null, image));
-										console.log(binary);
-										doc.picture = 'data:image/png;base64,' + binary;
+										doc.picture = 'data:image/png;base64,' + image;
 										this.results.push(doc);
 									});
 								})
@@ -81,7 +94,7 @@
 						this.changeListeningStatus();
 						console.log(this.annyang);
 						this.annyang.removeCallback("result", () => {
-							this.annyang.pause();
+							this.annyang.abort();
 						});
 					}
 				}
@@ -100,8 +113,32 @@
 		flex-direction: column;
 	}
 
+	#content {
+		overflow-y: scroll;
+		max-height: 100%;
+		width: 100%;
+		height: 100%;
+		background-color: azure;
+	}
+
 	#app > * {
 		box-sizing: inherit;
+	}
+
+	.suggestion {
+		background-color: white;
+		/* width: 50%; */
+		border: 1px solid gainsboro;
+		padding: 20px;
+		margin: 10px;
+		box-sizing: border-box;
+		display: flex;
+		max-width: 100%;
+		flex-direction: column;
+		/* width: 100%; */
+		height: 250px;
+		justify-content: center;
+		align-items: center;
 	}
 
 </style>
