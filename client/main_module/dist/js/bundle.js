@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app[data-v-d1f6fda2] {\n\twidth: 100%;\n\theight:100%;\n\tmargin: 0;\n\tpadding: 0;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tflex-direction: column;\n}\n\n#content[data-v-d1f6fda2] {\n\toverflow-y: scroll;\n\tmax-height: 100%;\n\twidth: 100%;\n\theight: 100%;\n\tbackground-color: azure;\n}\n\n#app > *[data-v-d1f6fda2] {\n\tbox-sizing: inherit;\n}\n\n.suggestion[data-v-d1f6fda2] {\n\tbackground-color: white;\n\t/* width: 50%; */\n\tborder: 1px solid gainsboro;\n\tpadding: 20px;\n\tmargin: 10px;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tmax-width: 100%;\n\tflex-direction: column;\n\t/* width: 100%; */\n\theight: 250px;\n\tjustify-content: center;\n\talign-items: center;\n}\n\n.suggestion img[data-v-d1f6fda2] {\n\twidth: 50px;\n\theight: 50px;\n\tdisplay: block;\n}")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app[data-v-b2dbf1e6] {\n\twidth: 100%;\n\theight:100%;\n\tmargin: 0;\n\tpadding: 0;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tflex-direction: column;\n}\n\n#content[data-v-b2dbf1e6] {\n\toverflow-y: scroll;\n\tmax-height: 100%;\n\twidth: 100%;\n\theight: 100%;\n\tbackground-color: azure;\n}\n\n#app > *[data-v-b2dbf1e6] {\n\tbox-sizing: inherit;\n}\n\n.suggestion[data-v-b2dbf1e6] {\n\tbackground-color: white;\n\t/* width: 50%; */\n\tborder: 1px solid gainsboro;\n\tpadding: 20px;\n\tmargin: 10px;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tmax-width: 100%;\n\tflex-direction: column;\n\t/* width: 100%; */\n\theight: 250px;\n\tjustify-content: center;\n\talign-items: center;\n}\n\n.suggestion img[data-v-b2dbf1e6] {\n\twidth: 50px;\n\theight: 50px;\n\tdisplay: block;\n}")
 ;(function(){
 "use strict";
 
@@ -99,21 +99,21 @@ var __vue__options__ = (typeof module.exports === "function"? module.exports.opt
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
 __vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app"}},[_c('header-app'),_vm._v(" "),_c('div',{attrs:{"id":"content"}},[_c('div',{on:{"click":_vm.toggleListen}},[_vm._v("\n\t\t\t"+_vm._s(_vm.isListening ? "Listening" : "Click to listen")+"\n\t\t")]),_vm._v(" "),_vm._l((this.results),function(result){return _c('div',{staticClass:"suggestion"},[_c('div',[_c('img',{attrs:{"src":result.picture}})]),_vm._v(" "),_c('div',{staticClass:"image-id"},[_c('div',[_vm._v("\n\t\t\t\t\tID\n\t\t\t\t")]),_vm._v(" "),_c('div',[_vm._v("\n\t\t\t\t\t"+_vm._s(result._id)+"\n\t\t\t\t")])]),_vm._v(" "),_c('div',{staticClass:"timestamp"},[_c('div',[_vm._v("\n\t\t\t\t\tTimestamp\n\t\t\t\t")]),_vm._v(" "),_c('div',[_vm._v("\n\t\t\t\t\t"+_vm._s(result.timestamp)+"\n\t\t\t\t")])])])})],2)],1)}
 __vue__options__.staticRenderFns = []
-__vue__options__._scopeId = "data-v-d1f6fda2"
+__vue__options__._scopeId = "data-v-b2dbf1e6"
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d1f6fda2", __vue__options__)
+    hotAPI.createRecord("data-v-b2dbf1e6", __vue__options__)
   } else {
-    hotAPI.reload("data-v-d1f6fda2", __vue__options__)
+    hotAPI.reload("data-v-b2dbf1e6", __vue__options__)
   }
 })()}
 
 },{"../factory/factory":3,"./header.vue":2,"annyang":5,"babel-runtime/core-js/promise":6,"vue":77,"vue-hot-reload-api":76,"vueify/lib/insert-css":78}],2:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app-header[data-v-59618def] {\n\tbackground-color: rgba(0, 0, 0, 0.9);\n\tmin-height: 70px;\n\twidth: 100%;\n\tborder-bottom: 1px solid rgb(210, 210, 210);\n\tbox-shadow: 0 1px 3px 4px rgba(255,255,255, 1);\n\tz-index: 2;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n#app-header img[data-v-59618def] {\n\theight: 35px;\n\twidth: 35px;\n\tmargin-left: 5px;\n}\n\nspan[data-v-59618def] {\n\tcolor: rgba(182, 193, 241, 0.65);\n\tfont-size: 36px;\n}")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app-header[data-v-3f8ed351] {\n\tbackground-color: rgba(0, 0, 0, 0.9);\n\tmin-height: 70px;\n\twidth: 100%;\n\tborder-bottom: 1px solid rgb(210, 210, 210);\n\tbox-shadow: 0 1px 3px 4px rgba(255,255,255, 1);\n\tz-index: 2;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n#app-header img[data-v-3f8ed351] {\n\theight: 35px;\n\twidth: 35px;\n\tmargin-left: 5px;\n}\n\nspan[data-v-3f8ed351] {\n\tcolor: rgba(182, 193, 241, 0.65);\n\tfont-size: 36px;\n}")
 ;(function(){
 "use strict";
 
@@ -135,16 +135,16 @@ var __vue__options__ = (typeof module.exports === "function"? module.exports.opt
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
 __vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _vm._m(0)}
 __vue__options__.staticRenderFns = [function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"app-header"}},[_c('img',{attrs:{"src":"../main_module/assets/art.png"}}),_vm._v(" "),_c('span',[_vm._v("Kortech")])])}]
-__vue__options__._scopeId = "data-v-59618def"
+__vue__options__._scopeId = "data-v-3f8ed351"
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-59618def", __vue__options__)
+    hotAPI.createRecord("data-v-3f8ed351", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-59618def", __vue__options__)
+    hotAPI.reload("data-v-3f8ed351", __vue__options__)
   }
 })()}
 
