@@ -2,7 +2,7 @@
 	"use strict";
 
 
-	module.exports = function (app, upload, watsonTextToSpeech, watsonSpeechToText, watsonConversation, FileHandler, fs, cloudantFactory) {
+	module.exports = function (app, upload, FileHandler, fs, cloudantFactory, watsonConversation) {
 		let imageDB = cloudantFactory("img_metadata");
 		let transformDate = require("../../helpers/dateRange").transformDate;
 

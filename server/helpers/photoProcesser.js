@@ -3,10 +3,6 @@
 
     module.exports = function (ExifImage, cloudantFactory) {
 
-        var database = cloudantFactory("img_metadata");
-
-        //'/Users/thirauj/Documents/Thiago/IBM/CIO/Applications/kortech/server/helpers/IMG_1164.jpg'
-
         return {
             "getMatadata": function (photo_path) {
                 return new Promise(function(resolve, reject) {
@@ -24,10 +20,10 @@
                                 const time = datetime.substr((datetime.indexOf(" ") + 1), datetime.length);
 
                                 resolve({
-                                    "id": new Date([date, time].join(" ")).getTime(),
                                     "datetime": {
                                         "date": date,
-                                        "time": time
+                                        "time": time,
+                                        "timestamp": new Date([date, time].join(" ")).getTime()
                                     },
                                     "gps": {
                                         "latitude": exifData.gps.GPSLatitude,
@@ -39,7 +35,7 @@
                     } catch (error) {
                         reject({
                             "error": error
-                        })
+                        });
                     }
                 });
             }
