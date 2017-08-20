@@ -6,23 +6,25 @@
 				{{isListening ? "Listening" : "Click to listen"}}
 			</div>
 			<div v-for="result in this.results" class="suggestion">
+				<div>
+					<img :src="result.picture" />
+				</div>
 				<div class="image-id">
-					<h6>
+					<div>
 						ID
-					</h6>
-					<span>
+					</div>
+					<div>
 						{{result._id}}
-					</span>
+					</div>
 				</div>
 				<div class="timestamp">
-					<h6>
+					<div>
 						Timestamp
-					</h6>
-					<span>
+					</div>
+					<div>
 						{{result.timestamp}}
-					</span>
+					</div>
 				</div>
-				<img :src="result.image" />
 			</div>
 		</div>
 	</div>
@@ -45,9 +47,7 @@
 				"headerApp": require("./header.vue")
 			},
 			"methods": {
-				"changeListeningStatus": function () {
-					this.isListening = !this.isListening;
-				},
+
 				"toggleListen": function () {
 					if (this.isListening) {
 						this.stopListening();
@@ -55,9 +55,15 @@
 						this.startListening();
 					}
 				},
+				"getImage": function (id) {
+					factory.getImage(doc._id).then((image) => {
+						doc.picture = 'data:image/jpg;base64,' + image;
+						this.results.push(doc);
+					});
+				},
 				"startListening": function (debug) {
 					return new Promise((resolve, reject) => {
-						this.changeListeningStatus();
+						this.isListening = true;
 						if (!debug) {
 							this.annyang.debug();
 						}
@@ -78,7 +84,7 @@
 							factory.askWatson(userSaid).then((watsonResponse) => {
 								watsonResponse.docs.forEach((doc) => {
 									factory.getImage(doc._id).then((image) => {
-										doc.picture = 'data:image/png;base64,' + image;
+										doc.picture = 'data:image/jpg;base64,' + image;
 										this.results.push(doc);
 									});
 								})
@@ -91,8 +97,9 @@
 				},
 				"stopListening": function () {
 					if (this.annyang.isListening()) {
-						this.changeListeningStatus();
+						this.isListening = false;
 						console.log(this.annyang);
+						this.annyang.pause();
 						this.annyang.removeCallback("result", () => {
 							this.annyang.abort();
 						});
@@ -139,6 +146,12 @@
 		height: 250px;
 		justify-content: center;
 		align-items: center;
+	}
+
+	.suggestion img {
+		width: 50px;
+		height: 50px;
+		display: block;
 	}
 
 </style>

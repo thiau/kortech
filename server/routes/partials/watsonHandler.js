@@ -36,8 +36,8 @@
 				let startHour = data.context.time_init;
 				let endHour = data.context.time_end;
 
-				startDateFinal = new Date([startDate, startHour].join(" "));
-				endDateFinal = new Date([endDate, startHour].join(" "));
+				let startDateFinal = new Date([startDate, startHour].join(" "));
+				let endDateFinal = new Date([endDate, startHour].join(" "));
 
 				let converted = transformDate(startDateFinal, endDateFinal, true);
 

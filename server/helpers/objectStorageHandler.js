@@ -12,7 +12,6 @@
                 return new Promise(function (resolve, reject) {
                     objectStorage.getContainer("images").then(function (container) {
                             container.getObject(imageName).then(function (obj) {
-                                console.log(obj);
                                 obj.load(false, true).then(function (content) {
                                     // console.log("Buffer", Buffer.from(content));
                                     // console.log("Content", content)
