@@ -77,6 +77,25 @@
 	require("./server/helpers/passport")(passport);
 	require("./server/routes/index")(app, upload, ttshelpers, stthelpers, wcshelpers, FileHandler, fs, obj_helper, cloudantFactory, request, photoHelper);
 
+
+	//Batch processer
+
+	// fs.readdir("/Users/thirauj/Documents/Thiago/IBM/temp/storage",function (err, files) {
+	// 	files.forEach(function (file) {
+	// 		fs.readFile("/Users/thirauj/Documents/Thiago/IBM/temp/storage/"+file, function (err, content) {
+	// 			photoHelper.getMatadata(content).then(function (metadata) {
+	//                 obj_helper.upload(metadata.id+".jpg", content).then(function (response) {
+	//                     console.log(response);
+	//                 }).catch(function (err) {
+	//                     console.log(err);
+	//                 });
+	//             }).catch(function (err) {
+	//                 console.log(err);
+	//             });
+	// 		})
+	// 	})
+	// });
+
 	server.listen(appPort, function () {
 		process.stdout.write(`\nServer running on port: ${appPort}\n`);
 	});
