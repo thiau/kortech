@@ -113,7 +113,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
 })()}
 
 },{"../factory/factory":3,"./header.vue":2,"annyang":5,"babel-runtime/core-js/promise":6,"vue":77,"vue-hot-reload-api":76,"vueify/lib/insert-css":78}],2:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app-header[data-v-59618def] {\n\tbackground-color: rgba(0, 0, 0, 0.9);\n\tmin-height: 70px;\n\twidth: 100%;\n\tborder-bottom: 1px solid rgb(210, 210, 210);\n\tbox-shadow: 0 1px 3px 4px rgba(255,255,255, 1);\n\tz-index: 2;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n#app-header img[data-v-59618def] {\n\theight: 35px;\n\twidth: 35px;\n}\n\nspan[data-v-59618def] {\n\n}")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#app-header[data-v-59618def] {\n\tbackground-color: rgba(0, 0, 0, 0.9);\n\tmin-height: 70px;\n\twidth: 100%;\n\tborder-bottom: 1px solid rgb(210, 210, 210);\n\tbox-shadow: 0 1px 3px 4px rgba(255,255,255, 1);\n\tz-index: 2;\n\tdisplay: flex;\n\talign-items: center;\n}\n\n#app-header img[data-v-59618def] {\n\theight: 35px;\n\twidth: 35px;\n\tmargin-left: 5px;\n}\n\nspan[data-v-59618def] {\n\tcolor: rgba(182, 193, 241, 0.65);\n\tfont-size: 36px;\n}")
 ;(function(){
 "use strict";
 
@@ -144,7 +144,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-59618def", __vue__options__)
   } else {
-    hotAPI.reload("data-v-59618def", __vue__options__)
+    hotAPI.rerender("data-v-59618def", __vue__options__)
   }
 })()}
 

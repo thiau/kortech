@@ -36,10 +36,12 @@
 	#app-header img {
 		height: 35px;
 		width: 35px;
+		margin-left: 5px;
 	}
 
 	span {
-
+		color: rgba(182, 193, 241, 0.65);
+		font-size: 36px;
 	}
 
 </style>
