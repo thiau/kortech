@@ -4,6 +4,9 @@
 			<img src="../main_module/assets/art.png" />
 			<span>Kortech</span>
 		</a>
+		<div class="user-id">
+			<span>Olá, Bruno!</span>
+		</div>
 	</div>
 </template>
 
@@ -33,6 +36,7 @@
 		z-index: 2;
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
 	}
 
 	#app-header img {
@@ -51,6 +55,12 @@
 		text-decoration: none;
 		display: flex;
 		align-items: center;
+	}
+
+	.user-id > span {
+		color: white;
+		font-size: 14px;
+		margin: 0 10px;
 	}
 
 </style>

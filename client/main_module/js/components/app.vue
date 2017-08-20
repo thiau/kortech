@@ -157,6 +157,9 @@
 		width: 100%;
 		height: 100%;
 		background-color: azure;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 
 
@@ -169,6 +172,8 @@
 		border: 1px solid gainsboro;
 		margin: 20px;
 		padding: 10px;
+		height: 60px;
+		width: 100%;
 		box-sizing: border-box;
 		border-radius: 5px;
 		letter-spacing: 1px;
@@ -246,7 +251,7 @@
 	#no-results {
 		height: 50%;
 		display: flex;
-		justify-content: center;
+		justify-content: flex-start;
 		align-items: center;
 		font-size: 20px;
 		user-select: none;
@@ -260,6 +265,7 @@
 		height: 200px;
 	}
 
+
 	#toast {
 		background-color: rgba(0, 0, 0, 0.9);
 		color: white;
@@ -268,6 +274,15 @@
 		justify-content: left;
 		align-items: center;
 		padding: 10px;
+	}
+
+	@media screen and (min-width: 760px) {
+		#content > span {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: space-evenly;
+		}
 	}
 
 

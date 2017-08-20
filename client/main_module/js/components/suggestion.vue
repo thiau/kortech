@@ -22,7 +22,7 @@
 <style scoped>
 	.suggestion {
 		background-color: white;
-		/* width: 50%; */
+		 width: 90%;
 		border: 1px solid gainsboro;
 		margin: 10px;
 		box-sizing: border-box;
@@ -30,9 +30,9 @@
 		max-width: 100%;
 		flex-direction: column;
 		/* width: 100%; */
-		height: 250px;
 		justify-content: space-between;
 		overflow: hidden;
+		border-radius: 3px;
 	}
 
 	.suggestion img {
@@ -51,6 +51,11 @@
 		margin: 5px;
 	}
 
-
-
+	@media screen and (min-width: 760px) {
+		.suggestion {
+			width: 45%;
+			height: auto;
+			flex-wrap: wrap;
+		}
+	}
 </style>
