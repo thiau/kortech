@@ -20,10 +20,10 @@
                                 const time = datetime.substr((datetime.indexOf(" ") + 1), datetime.length);
 
                                 resolve({
+                                    "timestamp": new Date([date, time].join(" ")).getTime(),
                                     "datetime": {
                                         "date": date,
                                         "time": time,
-                                        "timestamp": new Date([date, time].join(" ")).getTime()
                                     },
                                     "gps": {
                                         "latitude": exifData.gps.GPSLatitude,
