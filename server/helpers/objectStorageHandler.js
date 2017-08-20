@@ -1,10 +1,10 @@
 (function () {
   "use strict";
 
-  const os = require("bluemix-objectstorage").ObjectStorage;
+  const OS = require("bluemix-objectstorage").ObjectStorage;
   const os_credentials = require("../configs/objStorageConfig");
 
-  const objectStorage = new os(os_credentials);
+  const objectStorage = new OS(os_credentials);
 
   module.exports = function () {
     return {
@@ -14,7 +14,7 @@
             container.getObject(imageName).then(function (obj) {
               obj.load(false)
                 .then(function (content) {
-                  console.log(Buffer.from(content));
+                  resolve(content);
                 })
             });
           })
