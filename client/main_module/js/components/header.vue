@@ -42,6 +42,7 @@
 	span {
 		color: rgba(182, 193, 241, 0.65);
 		font-size: 36px;
+		margin-left: 5px;
 	}
 
 </style>
