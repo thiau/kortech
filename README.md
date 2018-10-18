@@ -1,6 +1,6 @@
 # Kortech
 
-__Try it on:__ https://kortech.mybluemix.net/
+__Try it on:__ https://kortech.mybluemix.net/ (not available at the moment)
 
 __Kortech__ uses the power of __Machine Learning__ to help you to remember the things you want. Just put the glasses on and you're good to go!
   - Couldn't find were you left your laptop? Just ask!
